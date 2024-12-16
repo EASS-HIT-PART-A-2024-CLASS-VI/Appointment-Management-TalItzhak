@@ -54,7 +54,7 @@ Access the API:
 
 Swagger UI: http://localhost:8000/docs
 
-Running Locally 🚀
+## Running Locally 🚀
 Clone the repository:
 
 bash
@@ -73,9 +73,10 @@ Copy code
 uvicorn app.main:app --reload
 Access the API:
 
+
 Swagger UI: http://127.0.0.1:8000/docs
-ReDoc: http://127.0.0.1:8000/redoc
-API Endpoints 🌐
+
+## API Endpoints 🌐
 Appointments
 Method	Endpoint	Description
 POST	/api/appointments/	Create a new appointment.
