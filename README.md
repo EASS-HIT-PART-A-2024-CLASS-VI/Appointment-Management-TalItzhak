@@ -1,7 +1,7 @@
-Appointment Management Backend 📅
+## Appointment Management Backend 📅
 This repository contains the backend for an Appointment Management application built using FastAPI and Docker. The API provides features such as creating, updating, deleting, and retrieving appointments, with capabilities like conflict detection, advanced search, and statistics generation.
 
-Features ✨
+## Features ✨
 CRUD Operations: Create, read, update, and delete appointments.
 Conflict Detection: Prevent overlapping appointments.
 Advanced Search: Search appointments by phone number and customer name.
@@ -14,7 +14,7 @@ Containerization: Docker
 Validation: Pydantic
 Testing: Pytest
 Build System: Uvicorn
-Project Structure 📂
+## Project Structure 📂
 plaintext
 Copy code
 app/
@@ -27,16 +27,16 @@ integration_tests.py - Integration tests for API endpoints.
 requirements.txt     - Python dependencies for the project.
 Dockerfile           - Docker configuration for containerized deployment.
 README.md            - Project documentation.
-Setup Instructions ⚙️
+## Setup Instructions ⚙️
 Prerequisites
 Before running the application, ensure the following tools are installed:
 
-Docker
+## Docker
 Python 3.9+ (optional, if running locally without Docker)
 Using Docker 🐳
 Clone the repository:
 
-bash
+## bash
 Copy code
 git clone https://github.com/your-username/appointment-management.git
 cd appointment-management
@@ -53,7 +53,7 @@ docker run -d --name appointment-management-backend -p 8000:8000 appointment-man
 Access the API:
 
 Swagger UI: http://localhost:8000/docs
-ReDoc: http://localhost:8000/redoc
+
 Running Locally 🚀
 Clone the repository:
 
