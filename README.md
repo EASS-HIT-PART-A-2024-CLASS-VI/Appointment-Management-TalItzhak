@@ -9,7 +9,6 @@ This repository contains the backend for an Appointment Management application b
 - **Conflict Detection**: Prevent overlapping appointments.  
 - **Advanced Search**: Search appointments by phone number and customer name.  
 - **Statistics Generation**: Summarize appointments and calculate total revenue.  
-- **Phone Normalization**: Ensures consistent formatting for phone numbers.  
 - **Dockerized Deployment**: Easily run the API in a containerized environment.  
 
 **Technologies Used** 🛠  
