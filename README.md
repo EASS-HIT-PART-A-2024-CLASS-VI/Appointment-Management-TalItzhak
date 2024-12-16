@@ -32,7 +32,7 @@ app/
 ├── requirements.txt   # Python dependencies for the project.
 ├── Dockerfile         # Docker configuration for containerized deployment.
 └── README.md          # Project documentation.
-ת
+
 ```
 ---
 
