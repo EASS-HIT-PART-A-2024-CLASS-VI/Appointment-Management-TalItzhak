@@ -14,10 +14,13 @@ The project is structured to include separate modules for authentication, shared
 - **Advanced Search**: Search appointments by phone number and customer name.  
 - **Statistics Generation**: Summarize appointments and calculate total revenue.  
 - **Phone Normalization**: Ensures consistent formatting for phone numbers.  
-- **Dockerized Deployment**: Easily run the API in a containerized environment.  
+- **Dockerized Deployment**: Easily run the API in a containerized environment.
+
+  
 
 **Technologies Used** 🛠  
 Language: Python (FastAPI)
+
 Database: SQLite (with SQLAlchemy ORM)
 Validation: Pydantic
 Authentication: OAuth2 with JWT
