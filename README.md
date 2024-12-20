@@ -1,8 +1,10 @@
 # Appointment Management Backend 🚀
+---
 
 This repository contains the backend for an Appointment Management application built using FastAPI and Docker.
 The API supports features such as user authentication, creating, updating, deleting, and retrieving appointments, along with conflict detection, advanced search, and statistics generation.
 The project is structured to include separate modules for authentication, shared functionality, and business-specific features, ensuring scalability and maintainability.
+
 ---
 
 ## Features ✨
