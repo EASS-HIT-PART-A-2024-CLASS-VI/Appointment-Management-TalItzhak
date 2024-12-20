@@ -63,7 +63,7 @@ backend/
 ├── requirements.txt            # Python dependencies.
 ├── .env                        # Environment variables for secure configuration.
 └── .gitignore                  # Files and directories to ignore in version control.
-ת
+
 ```
 ---
 
