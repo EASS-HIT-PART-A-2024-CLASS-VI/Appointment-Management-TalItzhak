@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# הוספת נתיבי Authentication (התחברות והרשמה)
+# הוספת נתיבי Authentication kkk(התחברות והרשמה)
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 
 # הוספת נתיבים משותפים (משותף ללקוחות ולבעלי עסקים)
