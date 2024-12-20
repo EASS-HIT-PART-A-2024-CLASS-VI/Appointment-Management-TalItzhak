@@ -18,15 +18,22 @@ The project is structured to include separate modules for authentication, shared
 
   
 
-**Technologies Used** 🛠  
+## Features 🛠  
+
 Language: Python (FastAPI)
 
 Database: SQLite (with SQLAlchemy ORM)
+
 Validation: Pydantic
+
 Authentication: OAuth2 with JWT
+
 Password Hashing: Passlib (bcrypt)
+
 Testing: Pytest
+
 Containerization: Docker
+
 Build System: Uvicorn
 
 ---
