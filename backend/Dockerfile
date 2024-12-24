@@ -5,6 +5,8 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install python-multipart
+
 
 # הרצה אוטומטית של יצירת מסד הנתונים
 RUN python create_db.py

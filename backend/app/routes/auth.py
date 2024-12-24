@@ -5,6 +5,9 @@ from app.models import User
 from app.security import get_password_hash, verify_password, create_access_token
 from app.dependencies import get_db
 from datetime import timedelta
+from fastapi import APIRouter, HTTPException, Depends, status, Form
+from fastapi.security import OAuth2PasswordRequestForm
+
 
 router = APIRouter()
 
@@ -24,13 +27,18 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return {"message": "User registered successfully", "user": new_user.username}
 
+
+
 @router.post("/login")
-def login(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.username == user.username).first()
-    if not db_user or not verify_password(user.password, db_user.password_hash):
-        raise HTTPException(status_code=400, detail="Invalid username or password")
-    token_expires = timedelta(minutes=30)
-    access_token = create_access_token(data={"sub": db_user.username, "role": db_user.role}, expires_delta=token_expires)
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.username == form_data.username).first()
+    if not db_user or not verify_password(form_data.password, db_user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
+        )
+        
+    access_token = create_access_token(
+        data={"sub": db_user.username, "role": db_user.role}
+    )
     return {"access_token": access_token, "token_type": "bearer"}
-
-
