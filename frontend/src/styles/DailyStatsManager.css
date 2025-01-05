@@ -1,0 +1,162 @@
+.daily-stats-manager {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.daily-stats-manager.light-mode {
+  background: #f8fafc;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background: #e2e8f0;
+}
+
+h2 {
+  text-align: center;
+  color: #1e293b;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.date-selector {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.date-selector label {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.date-selector input {
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #1e293b;
+}
+
+.date-selector input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.stats-container {
+  margin-top: 2rem;
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.stats-header h3 {
+  color: #3b82f6;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.total-revenue {
+  background: #3b82f6;
+  color: white;
+  grid-column: 1 / -1;
+}
+
+.total-revenue .stat-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-title {
+  color: #64748b;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.stat-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #1e293b;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  color: #64748b;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  text-align: center;
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 640px) {
+  .daily-stats-manager {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .date-selector {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

@@ -1,0 +1,244 @@
+/* General Container Styling */
+.home-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e0f7fa, #e5e7eb, #bfdbfe);
+  background-size: 400% 400%;
+  animation: gradientShift 10s ease infinite;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.home-container.dark-mode {
+  background: linear-gradient(135deg, #1e293b, #0f172a, #243b55);
+  background-size: 400% 400%;
+  animation: gradientShift 10s ease infinite;
+  color: #f1f5f9;
+}
+
+/* Background Animation */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.login-button,
+.mode-button {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: #0f172a;
+  border: 1px solid rgba(200, 200, 200, 0.7);
+  border-radius: 0.5rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover,
+.mode-button:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.dark-mode .login-button,
+.dark-mode .mode-button {
+  background: rgba(30, 41, 59, 0.7);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Content Grid */
+.content-grid {
+  max-width: 60rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  background: rgba(245, 245, 245, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .content-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dark-mode .content-grid {
+  background: rgba(30, 41, 59, 0.9);
+}
+
+/* Info Card */
+.info-card h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.info-card p {
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+.dark-mode .info-card h2 {
+  color: #f8fafc;
+}
+
+.dark-mode .info-card p {
+  color: #d1d5db;
+}
+
+/* Form Styling */
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.name-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.registration-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgba(200, 200, 200, 0.7);
+  border-radius: 0.5rem;
+  background: rgba(245, 245, 245, 0.9);
+  font-size: 1rem;
+  color: #0f172a;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.registration-form input:focus {
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  outline: none;
+}
+
+.dark-mode .registration-form input {
+  background: rgba(30, 41, 59, 0.7);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.registration-form input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .registration-form input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Business Name Input */
+.business-name-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgba(200, 200, 200, 0.7);
+  border-radius: 0.5rem;
+  background: rgba(245, 245, 245, 0.9);
+  font-size: 1rem;
+  color: #0f172a;
+  margin-top: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.business-name-input:focus {
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.dark-mode .business-name-input {
+  background: rgba(30, 41, 59, 0.7);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Role Buttons */
+.role-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.role-buttons button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(200, 200, 200, 0.7);
+  background: rgba(235, 245, 255, 0.9);
+  color: #0f172a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-buttons button:hover {
+  background: rgba(200, 230, 250, 0.9);
+}
+
+.role-buttons button.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #2563eb;
+}
+
+.dark-mode .role-buttons button {
+  background: rgba(30, 41, 59, 0.7);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark-mode .role-buttons button.active {
+  background: rgba(59, 130, 246, 0.9);
+  border-color: #3b82f6;
+}
+
+/* Submit Button */
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #2563eb;
+}
+/* Logo Styling */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: 150px; /* Adjust size as needed */
+  height: auto;
+}

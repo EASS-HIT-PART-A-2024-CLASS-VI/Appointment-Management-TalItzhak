@@ -1,0 +1,195 @@
+.availability-manager {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1000px;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .availability-manager.light-mode {
+    background: #f8fafc;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    transition: all 0.3s ease;
+  }
+  
+  .close-button:hover {
+    background: #e2e8f0;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #1e293b;
+    margin-bottom: 30px;
+    font-size: 24px;
+  }
+  
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .day-card {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .day-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .day-card.selected {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+  
+  .day-card.has-availability {
+    background: #f0fdf4;
+    border-color: #22c55e;
+  }
+  
+  .day-card h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .time-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .time-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .time-slot span {
+    color: #64748b;
+  }
+  
+  .delete-button {
+    background: #ef4444;
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .delete-button:hover {
+    background: #dc2626;
+  }
+  
+  .time-form {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+  }
+  
+  .time-form h3 {
+    margin: 0;
+    margin-bottom: 20px;
+    color: #1e293b;
+  }
+  
+  .time-inputs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .time-input-group {
+    flex: 1;
+  }
+  
+  .time-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #64748b;
+  }
+  
+  .time-input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .save-button {
+    width: 100%;
+    padding: 12px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background: #2563eb;
+  }
+  
+  .error-message,
+  .success-message {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .error-message {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+  
+  .success-message {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+  }

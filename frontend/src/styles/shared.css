@@ -1,0 +1,102 @@
+:root {
+    /* Dark theme colors */
+    --bg-primary: #1a1f2e;
+    --bg-secondary: #2a3040;
+    --text-primary: #e0e0e0;
+    --text-secondary: #cbd5e1;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #60a5fa;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --error-text: #ef4444;
+  }
+  
+  .light-mode {
+    --bg-primary: #f5f7fa;
+    --bg-secondary: #e4e9f2;
+    --text-primary: #2d3748;
+    --text-secondary: #4a5568;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #60a5fa;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --border-color: #e2e8f0;
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --error-text: #ef4444;
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+  
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+    background: var(--accent-primary);
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    cursor: pointer;
+  }
+  
+  .theme-toggle:hover {
+    background: var(--accent-secondary);
+    transform: translateY(-2px);
+  }
+  
+  .page-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .button-primary {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(90deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  }
+  
+  .input-field {
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  }

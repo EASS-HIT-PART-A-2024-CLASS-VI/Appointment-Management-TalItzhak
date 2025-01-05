@@ -1,0 +1,139 @@
+.appointments-viewer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.appointment-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.appointment-card:hover {
+  transform: translateY(-2px);
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.date-time {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.date {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.time {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.duration {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.appointment-details h4 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 1.2em;
+}
+
+.service-type,
+.business-info,
+.cost,
+.phone,
+.notes {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95em;
+}
+
+.appointment-details span {
+  color: #94a3b8;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background: #e2e8f0;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.loading,
+.no-appointments {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 1.1em;
+}
+
+h2 {
+  text-align: center;
+  color: #1e293b;
+  margin-bottom: 30px;
+  font-size: 1.5em;
+}
+
+.light-mode {
+  background: white;
+}
