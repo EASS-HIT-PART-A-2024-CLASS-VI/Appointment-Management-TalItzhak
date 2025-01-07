@@ -150,42 +150,41 @@ h2 {
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid #e2e8f0;
+  width: 100%;
 }
 
-.edit-button {
+.appointment-actions button {
   flex: 1;
+  min-height: 40px;
   padding: 0.75rem;
   border-radius: 4px;
-  border: none;
-  background: #3b82f6;
-  color: white;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.delete-button {
-  flex: 1;
-  padding: 0.75rem;
-  border-radius: 4px;
+  transition: all 0.3s ease;
   border: none;
-  background: #ef4444;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.appointment-actions .edit-button {
+  background-color: #3b82f6;
   color: white;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.edit-button:hover {
-  background: #2563eb;
+.appointment-actions .delete-button {
+  background-color: #ef4444;
+  color: white;
 }
 
-.delete-button:hover {
-  background: #dc2626;
+.appointment-actions .edit-button:hover {
+  background-color: #2563eb;
 }
 
-.edit-form {
-  padding: 1.5rem;
+.appointment-actions .delete-button:hover {
+  background-color: #dc2626;
 }
 
 .form-group {

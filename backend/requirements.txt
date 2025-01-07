@@ -11,3 +11,5 @@ xlsxwriter
 pandas
 openpyxl
 python-multipart
+python-dotenv
+

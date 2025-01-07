@@ -1,3 +1,4 @@
+// src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/api';
@@ -37,28 +38,23 @@ const Login = () => {
 
   return (
     <div className={`login-container ${!isDark ? 'light-mode' : ''}`}>
-      <div className="theme-button">
-        <button onClick={toggleTheme} className="mode-toggle">
-          {isDark ? 'Light Mode' : 'Dark Mode'}
+      <div className="theme-toggle">
+        <button onClick={toggleTheme} className="theme-button">
+          {isDark ? '☀️ Light Mode' : '🌙 Dark Mode'}
         </button>
       </div>
 
       <div className="content-wrapper">
-        <div className="info-section">
-          <h2>Details about us</h2>
-          <p>
-            Welcome to our appointment scheduling platform. We help connect businesses with their clients efficiently and professionally.
-          </p>
+        <div className="logo-section">
+          <img src="/logo.png" alt="Appointment Management" className="logo" />
+          <h1 className="app-title">APPOINTMENT MANAGEMENT</h1>
+          <p className="app-subtitle">Smart and swift, your time's best gift</p>
         </div>
 
-        <div className="form-section">
-          {/* Logo */}
-          <div className="logo-container">
-            <img src="/logo.png" alt="Platform Logo" className="logo" />
-          </div>
-
-          <form onSubmit={handleSubmit}>
-            {error && <div className="error">{error}</div>}
+        <div className="form-container">
+          <form onSubmit={handleSubmit} className="login-form">
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="input-group">
               <input
                 type="text"
@@ -66,6 +62,7 @@ const Login = () => {
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 required
+                className="form-input"
               />
               <input
                 type="password"
@@ -73,22 +70,25 @@ const Login = () => {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
+                className="form-input"
               />
             </div>
-            <button type="submit" className="login-button">
+
+            <button type="submit" className="primary-button">
               Login
             </button>
 
-            <div className="register-section">
-              <p>Don't have an account?</p>
-              <button
-                type="button"
-                onClick={() => navigate('/register')}
-                className="register-button"
-              >
-                Register here
-              </button>
+            <div className="divider">
+              <span>Don't have an account?</span>
             </div>
+
+            <button
+              type="button"
+              onClick={() => navigate('/register')}
+              className="secondary-button"
+            >
+              Register here
+            </button>
           </form>
         </div>
       </div>
