@@ -7,7 +7,7 @@ import '../styles/Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,6 +21,10 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.role) {
+      setError('Please select a role');
+      return;
+    }
     try {
       await registerUser({
         first_name: formData.firstName,
@@ -39,12 +43,6 @@ const Register = () => {
 
   return (
     <div className={`register-container ${!isDark ? 'light-mode' : ''}`}>
-      <div className="theme-button">
-        <button onClick={toggleTheme} className="mode-toggle">
-          {isDark ? 'Light Mode' : 'Dark Mode'}
-        </button>
-      </div>
-
       <div className="content-wrapper">
         <div className="logo-section">
           <img 
@@ -68,6 +66,7 @@ const Register = () => {
                     value={formData.firstName}
                     onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                     required
+                    className="form-input"
                   />
                   <input
                     type="text"
@@ -75,6 +74,7 @@ const Register = () => {
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                     required
+                    className="form-input"
                   />
                 </div>
 
@@ -84,6 +84,7 @@ const Register = () => {
                   value={formData.username}
                   onChange={(e) => setFormData({...formData, username: e.target.value})}
                   required
+                  className="form-input"
                 />
 
                 <input
@@ -92,6 +93,7 @@ const Register = () => {
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   required
+                  className="form-input"
                 />
 
                 <input
@@ -100,20 +102,21 @@ const Register = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   required
+                  className="form-input"
                 />
               </div>
 
               <div className="role-buttons">
                 <button
                   type="button"
-                  className={formData.role === 'customer' ? 'active' : ''}
+                  className={`role-button ${formData.role === 'customer' ? 'active' : ''}`}
                   onClick={() => setFormData({...formData, role: 'customer'})}
                 >
                   Client
                 </button>
                 <button
                   type="button"
-                  className={formData.role === 'business_owner' ? 'active' : ''}
+                  className={`role-button ${formData.role === 'business_owner' ? 'active' : ''}`}
                   onClick={() => setFormData({...formData, role: 'business_owner'})}
                 >
                   Business Owner
@@ -128,24 +131,26 @@ const Register = () => {
                     value={formData.businessName}
                     onChange={(e) => setFormData({...formData, businessName: e.target.value})}
                     required
+                    className="form-input"
                   />
                 </div>
               )}
 
-              <button type="submit" className="register-button">
+              <button type="submit" className="primary-button">
                 Register
               </button>
 
-              <div className="login-section">
-                <p>Already have an account?</p>
-                <button
-                  type="button"
-                  onClick={() => navigate('/login')}
-                  className="login-link"
-                >
-                  Login here
-                </button>
+              <div className="divider">
+                <span>Already have an account?</span>
               </div>
+
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="secondary-button"
+              >
+                Login here
+              </button>
             </form>
           </div>
         </div>

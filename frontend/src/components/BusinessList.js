@@ -22,12 +22,12 @@ const BusinessList = ({ onClose }) => {
     try {
       const response = await fetch('http://localhost:8000/api/services/public/businesses', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
-      
+
       if (!response.ok) throw new Error('Failed to fetch businesses');
-      
+
       const data = await response.json();
       console.log('Businesses:', data); // Debug log
       setBusinesses(data);
@@ -42,24 +42,26 @@ const BusinessList = ({ onClose }) => {
   return (
     <div className={`business-list ${!isDark ? 'light-mode' : ''}`}>
       <div className="close-button" onClick={onClose}>×</div>
-      
+
       <h2>Available Businesses</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       {loading ? (
         <div className="loading">Loading businesses...</div>
       ) : (
         <div className="businesses-grid">
-          {businesses.map(business => (
+          {businesses.map((business) => (
             <div key={business.id} className="business-card">
-              <h3>{business.business_name || `${business.first_name} ${business.last_name}'s Business`}</h3>
+              <h3 className="business-name">{business.business_name || 'Business Name Not Provided'}</h3>
+              <p className="owner-name">
+                {`${business.first_name} ${business.last_name}`}
+              </p>
               <p className="business-details">
                 {business.services?.length || 0} services available
               </p>
-              
               <div className="business-actions">
-                <button 
+                <button
                   className="action-button"
                   onClick={() => {
                     setSelectedBusiness(business);
@@ -68,8 +70,7 @@ const BusinessList = ({ onClose }) => {
                 >
                   Show availability
                 </button>
-                
-                <button 
+                <button
                   className="action-button"
                   onClick={() => {
                     setSelectedBusiness(business);
@@ -85,14 +86,14 @@ const BusinessList = ({ onClose }) => {
       )}
 
       {showAvailability && selectedBusiness && (
-        <BusinessAvailability 
+        <BusinessAvailability
           businessId={selectedBusiness.id}
           onClose={() => setShowAvailability(false)}
         />
       )}
 
       {showCreateMeeting && selectedBusiness && (
-        <CreateMeeting 
+        <CreateMeeting
           business={selectedBusiness}
           onClose={() => setShowCreateMeeting(false)}
         />

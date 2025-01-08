@@ -1,3 +1,4 @@
+// BusinessDashboard.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
@@ -8,9 +9,19 @@ import ClientSearchManager from './ClientSearchManager';
 import DailyStatsManager from './DailyStatsManager';
 import '../styles/BusinessDashboard.css';
 
+import { 
+  Calendar,
+  Briefcase,
+  Search,
+  Clock,
+  BarChart2,
+  FileDown,
+  LogOut
+} from 'lucide-react';
+
 const BusinessDashboard = () => {
   const navigate = useNavigate();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
   const [showAvailability, setShowAvailability] = useState(false);
   const [showAppointments, setShowAppointments] = useState(false);
   const [showServices, setShowServices] = useState(false);
@@ -32,45 +43,34 @@ const BusinessDashboard = () => {
       setExportError('');
       setExportSuccess('');
 
-      console.log('Starting export...');
-
-      // Updated URL to match backend endpoint
       const response = await fetch('http://localhost:8000/api/business/appointments/export', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        },
       });
-
-      console.log('Response status:', response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Server response:', errorText);
         throw new Error('Failed to export appointments');
       }
 
       const blob = await response.blob();
-      console.log('Blob size:', blob.size);
-
       if (blob.size === 0) {
         throw new Error('No appointments data available');
       }
 
-      // Get filename from response headers or use default
       const contentDisposition = response.headers.get('Content-Disposition');
       const filename = contentDisposition
         ? contentDisposition.split('filename=')[1].replace(/"/g, '')
         : `appointments_${new Date().toISOString().split('T')[0]}.xlsx`;
 
-      // Create download link
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = filename;
 
-      // Trigger download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -79,104 +79,82 @@ const BusinessDashboard = () => {
       setExportSuccess('Appointments exported successfully!');
       setTimeout(() => setExportSuccess(''), 3000);
     } catch (error) {
-      console.error('Export error:', error);
       setExportError(error.message || 'Failed to export appointments. Please try again.');
     } finally {
       setExportLoading(false);
     }
-};
+  };
 
   return (
     <div className={`dashboard-container ${!isDark ? 'light-mode' : ''}`}>
       <div className="dashboard-content">
         <div className="top-bar">
           <button onClick={handleLogout} className="logout-button">
-            LogOut
-          </button>
-          <button onClick={toggleTheme} className="mode-toggle">
-            {isDark ? 'Light Mode' : 'Dark Mode'}
+            <LogOut size={18} className="button-icon" />
+            <span>LogOut</span>
           </button>
         </div>
 
         <div className="actions-panel">
-          <button 
+          <button
             className="dashboard-button"
             onClick={() => setShowAppointments(true)}
           >
-            MY appointments
+            <Calendar size={18} className="button-icon" />
+            <span>My Appointments</span>
           </button>
-          
-          <button 
+
+          <button
             className="dashboard-button"
             onClick={() => setShowServices(true)}
           >
-            My Services
+            <Briefcase size={18} className="button-icon" />
+            <span>My Services</span>
           </button>
 
-          <button 
+          <button
             className="dashboard-button"
             onClick={() => setShowClientSearch(true)}
           >
-            Search Client
+            <Search size={18} className="button-icon" />
+            <span>Search Client</span>
           </button>
-          
-          <button 
+
+          <button
             className="dashboard-button"
             onClick={() => setShowAvailability(true)}
           >
-            Make availability
+            <Clock size={18} className="button-icon" />
+            <span>Make Availability</span>
           </button>
-          
-          <button 
+
+          <button
             className="dashboard-button"
             onClick={() => setShowDailyStats(true)}
           >
-            Search daily statistic
+            <BarChart2 size={18} className="button-icon" />
+            <span>Daily Statistics</span>
           </button>
-          
-          <button 
+
+          <button
             className={`dashboard-button ${exportLoading ? 'loading' : ''}`}
             onClick={handleExportToExcel}
             disabled={exportLoading}
           >
-            {exportLoading ? 'Exporting...' : 'Export appointments to Excel'}
+            <FileDown size={18} className="button-icon" />
+            <span>{exportLoading ? 'Exporting...' : 'Export Appointments to Excel'}</span>
           </button>
-          
-          {exportError && (
-            <div className="error-message">
-              {exportError}
-            </div>
-          )}
-          
-          {exportSuccess && (
-            <div className="success-message">
-              {exportSuccess}
-            </div>
-          )}
+
+          {exportError && <div className="error-message">{exportError}</div>}
+          {exportSuccess && <div className="success-message">{exportSuccess}</div>}
         </div>
       </div>
 
-      {showAvailability && (
-        <AvailabilityManager onClose={() => setShowAvailability(false)} />
-      )}
-
-      {showAppointments && (
-        <AppointmentsManager onClose={() => setShowAppointments(false)} />
-      )}
-
-      {showServices && (
-        <ServicesManager onClose={() => setShowServices(false)} />
-      )}
-
-      {showClientSearch && (
-        <ClientSearchManager 
-          onClose={() => setShowClientSearch(false)} 
-        />
-      )}
-
-      {showDailyStats && (
-        <DailyStatsManager onClose={() => setShowDailyStats(false)} />
-      )}
+      {showAvailability && <AvailabilityManager onClose={() => setShowAvailability(false)} />}
+      {showAppointments && <AppointmentsManager onClose={() => setShowAppointments(false)} />}
+      {showServices && <ServicesManager onClose={() => setShowServices(false)} />}
+      {showClientSearch && <ClientSearchManager onClose={() => setShowClientSearch(false)} />}
+      {showDailyStats && <DailyStatsManager onClose={() => setShowDailyStats(false)} />}
     </div>
   );
 };

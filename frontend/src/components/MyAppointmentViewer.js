@@ -1,4 +1,3 @@
-// MyAppointmentViewer.js
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import '../styles/MyAppointmentViewer.css';
@@ -28,10 +27,11 @@ const MyAppointmentViewer = ({ onClose }) => {
         }
         
         const data = await response.json();
+        // Sort appointments by date and time - closest first
         const sortedAppointments = data.sort((a, b) => {
-          const dateTimeA = new Date(`${a.date}T${a.start_time}`);
-          const dateTimeB = new Date(`${b.date}T${b.start_time}`);
-          return dateTimeB - dateTimeA;
+          const dateA = new Date(`${a.date} ${a.start_time}`);
+          const dateB = new Date(`${b.date} ${b.start_time}`);
+          return dateA - dateB;
         });
         
         setAppointments(sortedAppointments);
@@ -59,14 +59,17 @@ const MyAppointmentViewer = ({ onClose }) => {
     return timeString.slice(0, 5);
   };
 
-  const groupedAppointments = appointments.reduce((groups, appointment) => {
-    const date = appointment.date;
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(appointment);
-    return groups;
-  }, {});
+  // Group appointments by date after they're loaded
+  const groupedAppointments = appointments.length > 0 
+    ? appointments.reduce((groups, appointment) => {
+        const date = appointment.date;
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(appointment);
+        return groups;
+      }, {})
+    : {};
 
   return (
     <div className={`appointments-viewer ${!isDark ? 'light-mode' : ''}`}>
@@ -82,41 +85,43 @@ const MyAppointmentViewer = ({ onClose }) => {
         <div className="no-appointments">No appointments found</div>
       ) : (
         <div className="appointments-list">
-          {Object.entries(groupedAppointments).map(([date, dayAppointments]) => (
-            <div key={date} className="date-group">
-              <h3 className="date-header">{formatDate(date)}</h3>
-              <div className="day-appointments">
-                {dayAppointments.map(appointment => (
-                  <div key={appointment.id} className="appointment-card">
-                    <div className="appointment-time">
-                      {formatTime(appointment.start_time)}
-                    </div>
-                    <div className="appointment-details">
-                      <h4>{appointment.title}</h4>
-                      <p className="service-type">
-                        <span>Service Type:</span> {appointment.type}
-                      </p>
-                      <p className="business-info">
-                        <span>Business:</span> {appointment.customer_name}
-                      </p>
-                      <div className="duration-cost">
-                        <span>Duration: {appointment.duration}min</span>
-                        <span>Cost: ${appointment.cost}</span>
+          {Object.keys(groupedAppointments)
+            .sort((a, b) => new Date(a) - new Date(b))
+            .map(date => (
+              <div key={date} className="date-group">
+                <h3 className="date-header">{formatDate(date)}</h3>
+                <div className="day-appointments">
+                  {groupedAppointments[date].map(appointment => (
+                    <div key={appointment.id} className="appointment-card">
+                      <div className="appointment-time">
+                        {formatTime(appointment.start_time)}
                       </div>
-                      <p className="phone">
-                        <span>Phone:</span> {appointment.customer_phone}
-                      </p>
-                      {appointment.notes && (
-                        <p className="notes">
-                          <span>Notes:</span> {appointment.notes}
+                      <div className="appointment-details">
+                        <h4>{appointment.title}</h4>
+                        <p className="service-type">
+                          <span>Service Type:</span> {appointment.type}
                         </p>
-                      )}
+                        <p className="business-info">
+                          <span>Business:</span> {appointment.customer_name}
+                        </p>
+                        <div className="duration-cost">
+                          <span>Duration: {appointment.duration}min</span>
+                          <span>Cost: ${appointment.cost}</span>
+                        </div>
+                        <p className="phone">
+                          <span>Phone:</span> {appointment.customer_phone}
+                        </p>
+                        {appointment.notes && (
+                          <p className="notes">
+                            <span>Notes:</span> {appointment.notes}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
     </div>

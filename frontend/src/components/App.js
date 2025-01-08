@@ -1,3 +1,4 @@
+// src/components/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '../context/ThemeContext';
@@ -7,7 +8,6 @@ import Register from './Register';
 import BusinessDashboard from './BusinessDashboard';
 import CustomerDashboard from './CustomerDashboard';
 import ProtectedRoute from './ProtectedRoute';
-import '../styles/shared.css';
 
 const App = () => {
   return (

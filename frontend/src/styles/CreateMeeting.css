@@ -1,4 +1,4 @@
-.appointments-viewer {
+.create-meeting {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -13,127 +13,121 @@
   overflow-y: auto;
 }
 
-.appointments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.appointment-card {
+.create-meeting.light-mode {
   background: #f8fafc;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
-}
-
-.appointment-card:hover {
-  transform: translateY(-2px);
-}
-
-.appointment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.date-time {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.date {
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.time {
-  color: #3b82f6;
-  font-weight: 500;
-}
-
-.duration {
-  color: #64748b;
-  font-size: 0.9em;
-}
-
-.appointment-details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.appointment-details h4 {
-  margin: 0;
-  color: #1e293b;
-  font-size: 1.2em;
-}
-
-.service-type,
-.business-info,
-.cost,
-.phone,
-.notes {
-  margin: 0;
-  color: #64748b;
-  font-size: 0.95em;
-}
-
-.appointment-details span {
-  color: #94a3b8;
-  font-weight: 500;
-  margin-right: 8px;
 }
 
 .close-button {
   position: absolute;
   top: 20px;
   right: 20px;
+  font-size: 24px;
+  cursor: pointer;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  font-size: 24px;
-  transition: background-color 0.3s ease;
+  background: #f1f5f9;
+  transition: all 0.3s ease;
 }
 
 .close-button:hover {
   background: #e2e8f0;
 }
 
-.error-message {
-  background: #fef2f2;
-  color: #dc2626;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.loading,
-.no-appointments {
-  text-align: center;
-  padding: 40px;
-  color: #64748b;
-  font-size: 1.1em;
-}
-
-h2 {
+h3 {
   text-align: center;
   color: #1e293b;
   margin-bottom: 30px;
-  font-size: 1.5em;
+  font-size: 24px;
 }
 
-.light-mode {
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.time-selection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.time-selection select {
+  flex: 1;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
   background: white;
+  color: #1e293b;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+input, select {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+button {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .create-meeting {
+    padding: 20px;
+    width: 95%;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  input, select, button {
+    padding: 12px;
+    font-size: 14px;
+  }
 }

@@ -36,10 +36,18 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.business-card h3 {
-  margin: 0;
-  color: #1e293b;
+.business-name {
   font-size: 18px;
+  font-weight: bold;
+  color: #1e293b;
+  margin: 0;
+}
+
+.owner-name {
+  font-size: 16px;
+  color: #475569;
+  margin: 5px 0 10px;
+  font-weight: 500;
 }
 
 .business-details {

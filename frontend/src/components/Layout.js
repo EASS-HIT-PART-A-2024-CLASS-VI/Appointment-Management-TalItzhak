@@ -1,11 +1,20 @@
+// src/components/Layout.js
 import React from 'react';
+import DarkModeButton from './DarkModeButton';
+import { useTheme } from '../context/ThemeContext';
+import '../styles/Layout.css';
 
 const Layout = ({ children }) => {
- return (
-   <div className="min-h-screen bg-gray-900 text-white relative">
-     {children}
-   </div>
- );
+  const { isDark } = useTheme();
+
+  return (
+    <div className={`layout ${!isDark ? 'light-mode' : ''}`}>
+      <DarkModeButton />
+      <div className="layout-content">
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export default Layout;

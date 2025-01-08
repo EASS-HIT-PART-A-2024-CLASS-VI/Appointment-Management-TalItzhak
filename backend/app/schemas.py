@@ -118,6 +118,8 @@ class BusinessResponse(BaseModel):
     last_name: str
     username: str
     services: List[ServiceResponse]
+    business_name: Optional[str]  
+
 
 # Updated Availability Schemas
 class AvailabilityBase(BaseModel):

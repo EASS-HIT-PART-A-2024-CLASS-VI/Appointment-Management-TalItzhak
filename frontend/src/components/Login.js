@@ -38,11 +38,6 @@ const Login = () => {
 
   return (
     <div className={`login-container ${!isDark ? 'light-mode' : ''}`}>
-      <div className="theme-toggle">
-        <button onClick={toggleTheme} className="theme-button">
-          {isDark ? '☀️ Light Mode' : '🌙 Dark Mode'}
-        </button>
-      </div>
 
       <div className="content-wrapper">
         <div className="logo-section">
