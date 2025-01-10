@@ -1,204 +1,204 @@
 .client-search-manager {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 1000px;
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-height: 90vh;
-    overflow-y: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 1000px;
+  background: var(--bg-secondary);
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+  color: var(--text-primary);
+}
+
+/* Search Form */
+.search-form {
+  margin-bottom: 30px;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-hover);
+}
+
+.search-button {
+  width: 100%;
+  padding: 16px;
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Search Results */
+.search-results h3 {
+  color: var(--text-primary);
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.date-header {
+  color: var(--accent-primary);
+  font-size: 20px;
+  font-weight: 600;
+  padding: 15px 0;
+  border-bottom: 2px solid var(--border-color);
+  margin: 30px 0 20px 0;
+}
+
+/* Appointment Cards */
+.appointment-card {
+  background: var(--bg-tertiary);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+}
+
+.appointment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Time Section */
+.time-section {
+  background: var(--accent-primary);
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  min-width: 120px;
+}
+
+.time {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.duration {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Appointment Details */
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.client-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.info-value {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.cost-badge {
+  display: inline-block;
+  background: var(--success-bg);
+  color: var(--success-text);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.close-button:hover {
+  background: var(--accent-hover);
+  color: var(--accent-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .client-search-manager {
+    width: 95%;
+    padding: 24px;
   }
-  
-  .client-search-manager.light-mode {
-    background: #f8fafc;
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f1f5f9;
-    transition: all 0.3s ease;
-  }
-  
-  .close-button:hover {
-    background: #e2e8f0;
-  }
-  
-  h2 {
-    text-align: center;
-    color: #1e293b;
-    margin-bottom: 30px;
-    font-size: 24px;
-  }
-  
-  .search-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .search-type-selector {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-  }
-  
-  .type-button {
-    padding: 12px 24px;
-    border-radius: 10px;
-    border: 1px solid #e2e8f0;
-    background: white;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .type-button.active {
-    background: #3b82f6;
-    color: white;
-    border-color: #3b82f6;
-  }
-  
-  .search-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .client-search-inputs {
-    display: flex;
-    gap: 15px;
-  }
-  
-  input {
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    font-size: 16px;
-    flex: 1;
-  }
-  
-  input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-  }
-  
-  .search-button {
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    background: #3b82f6;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .search-button:hover {
-    background: #2563eb;
-  }
-  
-  .results-container {
-    margin-top: 20px;
-  }
-  
-  .results-container h3 {
-    color: #1e293b;
-    margin-bottom: 15px;
-    font-size: 20px;
-  }
-  
+
   .appointment-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  
-  .appointment-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  .time-section {
+    padding: 15px;
   }
-  
-  .appointment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e2e8f0;
+
+  .client-info {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
-  
-  .date-time {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .date {
-    font-weight: 600;
-    color: #1e293b;
-  }
-  
-  .time {
-    color: #3b82f6;
-    font-weight: 500;
-  }
-  
-  .duration {
-    color: #64748b;
-    font-size: 14px;
-  }
-  
-  .appointment-details h4 {
-    color: #1e293b;
-    margin: 0 0 10px 0;
-    font-size: 18px;
-  }
-  
-  .customer-info, .price, .notes {
-    margin: 5px 0;
-    color: #64748b;
-    font-size: 14px;
-  }
-  
-  .customer-info span, .price span, .notes span {
-    color: #94a3b8;
-    font-weight: 500;
-  }
-  
-  .error-message {
-    background: #fef2f2;
-    color: #dc2626;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-  }
-  
-  .loading {
-    text-align: center;
-    color: #64748b;
-    padding: 20px;
-  }
-  
-  .light-mode .appointment-card {
-    background: white;
-  }
+}

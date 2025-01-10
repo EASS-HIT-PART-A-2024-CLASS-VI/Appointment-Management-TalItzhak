@@ -80,7 +80,6 @@ const DailyStatsManager = ({ onClose }) => {
           type="date"
           value={selectedDate}
           onChange={handleDateChange}
-          //max={new Date().toISOString().split('T')[0]}
         />
       </div>
 

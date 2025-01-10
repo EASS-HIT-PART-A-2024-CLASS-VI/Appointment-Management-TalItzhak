@@ -1,20 +1,82 @@
-.create-meeting {
+.business-list {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
-  max-width: 800px;
-  background: white;
+  max-width: 1200px;
+  background: var(--bg-secondary);
   padding: 30px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   max-height: 90vh;
   overflow-y: auto;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
-.create-meeting.light-mode {
-  background: #f8fafc;
+.businesses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.business-card {
+  background: var(--bg-tertiary);
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.business-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.business-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.owner-name {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 5px 0 10px;
+  font-weight: 500;
+}
+
+.business-details {
+  color: var(--text-tertiary);
+  margin: 0;
+  font-size: 14px;
+}
+
+.business-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-primary);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.action-button:hover {
+  background: var(--accent-secondary);
 }
 
 .close-button {
@@ -29,105 +91,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   transition: all 0.3s ease;
+  border: none;
 }
 
 .close-button:hover {
-  background: #e2e8f0;
+  background: var(--accent-hover);
 }
 
-h3 {
+h2 {
   text-align: center;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 30px;
   font-size: 24px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.time-selection {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-.time-selection select {
-  flex: 1;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  background: white;
-  color: #1e293b;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-input, select {
-  width: 100%;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  font-size: 16px;
-  color: #1e293b;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-}
-
-button {
-  padding: 15px;
-  border-radius: 10px;
-  border: none;
-  background: #3b82f6;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  background: #2563eb;
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
 }
 
 .error-message {
-  background: #fef2f2;
-  color: #dc2626;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
+  background: var(--error-bg);
+  color: var(--error-text);
+  padding: 12px;
+  border-radius: 8px;
   margin-bottom: 20px;
-}
-
-.success-message {
-  background: #f0fdf4;
-  color: #16a34a;
-  padding: 15px;
-  border-radius: 10px;
   text-align: center;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-  .create-meeting {
-    padding: 20px;
-    width: 95%;
-  }
-
-  h3 {
-    font-size: 20px;
-  }
-
-  input, select, button {
-    padding: 12px;
-    font-size: 14px;
-  }
+  border: 1px solid var(--error-text);
 }

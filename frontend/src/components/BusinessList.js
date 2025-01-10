@@ -5,7 +5,7 @@ import BusinessAvailability from './BusinessAvailability';
 import CreateMeeting from './CreateMeeting';
 import '../styles/BusinessList.css';
 
-const BusinessList = ({ onClose }) => {
+const BusinessList = ({ onClose, viewType = 'all' }) => {
   const { isDark } = useTheme();
   const [businesses, setBusinesses] = useState([]);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
@@ -39,11 +39,22 @@ const BusinessList = ({ onClose }) => {
     }
   };
 
+  const getPageTitle = () => {
+    switch(viewType) {
+      case 'create':
+        return 'Create a Meeting';
+      case 'availability':
+        return 'Available Businesses';
+      default:
+        return 'All Businesses';
+    }
+  };
+
   return (
     <div className={`business-list ${!isDark ? 'light-mode' : ''}`}>
       <div className="close-button" onClick={onClose}>×</div>
 
-      <h2>Available Businesses</h2>
+      <h2>{getPageTitle()}</h2>
 
       {error && <div className="error-message">{error}</div>}
 
@@ -61,24 +72,28 @@ const BusinessList = ({ onClose }) => {
                 {business.services?.length || 0} services available
               </p>
               <div className="business-actions">
-                <button
-                  className="action-button"
-                  onClick={() => {
-                    setSelectedBusiness(business);
-                    setShowAvailability(true);
-                  }}
-                >
-                  Show availability
-                </button>
-                <button
-                  className="action-button"
-                  onClick={() => {
-                    setSelectedBusiness(business);
-                    setShowCreateMeeting(true);
-                  }}
-                >
-                  Create a meeting
-                </button>
+                {viewType !== 'create' && (
+                  <button
+                    className="action-button"
+                    onClick={() => {
+                      setSelectedBusiness(business);
+                      setShowAvailability(true);
+                    }}
+                  >
+                    Show availability
+                  </button>
+                )}
+                {viewType !== 'availability' && (
+                  <button
+                    className="action-button"
+                    onClick={() => {
+                      setSelectedBusiness(business);
+                      setShowCreateMeeting(true);
+                    }}
+                  >
+                    Create a meeting
+                  </button>
+                )}
               </div>
             </div>
           ))}

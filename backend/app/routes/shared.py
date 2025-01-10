@@ -237,23 +237,20 @@ async def search_appointments_by_user(
    return appointments
 
 
-@router.get("/api/shared/me", response_model=UserResponse)
+@router.get("/me", response_model=UserResponse)
 async def get_current_user_info(
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
     """Get current user information"""
-    # Get username from the token payload
     username = current_user.get("sub")
     if not username:
         raise HTTPException(status_code=401, detail="Invalid token")
     
-    # Query the database for the user
     user = db.query(User).filter(User.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Return UserResponse model
     return UserResponse(
         id=user.id,
         first_name=user.first_name,
@@ -281,6 +278,4 @@ def delete_appointment(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-
-
- 
+    
