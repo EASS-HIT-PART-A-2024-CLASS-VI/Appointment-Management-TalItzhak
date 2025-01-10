@@ -2,6 +2,22 @@
 
 A full-stack appointment scheduling application built with FastAPI and React, featuring a dark/light theme and role-based access control.
 
+### screenshots
+
+🖼️ Screenshots
+
+## Register Page
+![](screenshots/RegistrPage.png)
+## Appointmens Page
+![](screenshots/My_Bussiness_Appointments.png)
+## Services Page
+![](screenshots/Services_screenshot.png)
+## Availability Page
+![](screenshots/RegistrPage.png)
+## Create meeting Page
+![](screenshots/Create_meeting.png)
+
+
 ## ✨ Features
 
 ### For Business Owners
