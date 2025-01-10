@@ -8,7 +8,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 ![Register Page](/screenshots/RegisterPage.png)
 
 ## Business Management
-![Business Appointments](/screenshots/My_Business_Appointments.png)
+![Business Appointments](/screenshots/My_Bussiness_Appointments.png)
 ![Services Management](/screenshots/Services_screenshot.png)
 ![Availability Management](/screenshots/Availability_screenshot.png)
 
