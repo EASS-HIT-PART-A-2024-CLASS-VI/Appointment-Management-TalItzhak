@@ -5,15 +5,15 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 ### 🖼️ Screenshots
 
 ## Login and Registration
-![Register Page](/screenshots/RegisterPage.png)
+<img src="screenshots/RegisterPage.png" alt="Register Page" width="500"/>
 
 ## Business Management
-![Business Appointments](/screenshots/My_Bussiness_Appointments.png)
-![Services Management](/screenshots/Services_screenshot.png)
-![Availability Management](/screenshots/Availability_screenshot.png)
+<img src="screenshots/My_Bussiness_Appointments.png" alt="Business Appointments" width="500"/>
+<img src="screenshots/Services_screenshot.png" alt="Services Management" width="500"/>
+<img src="screenshots/Availability_screenshot.png" alt="Availability Management" width="500"/>
 
 ## Customer Features
-![Create Meeting](/screenshots/Create_Meeting.png)
+<img src="screenshots/Create_Meeting.png" alt="Create Meeting" width="500"/>
 
 
 ## ✨ Features
