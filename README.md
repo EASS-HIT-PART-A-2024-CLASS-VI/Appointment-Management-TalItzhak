@@ -10,10 +10,10 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 ## Business Management
 ![Business Appointments](/screenshots/My_Business_Appointments.png)
 ![Services Management](/screenshots/Services_screenshot.png)
-![Availability Management](/screenshots/Availability.png)
+![Availability Management](/screenshots/Availability_screenshot.png)
 
 ## Customer Features
-![Create Meeting](/screenshots/Create_meeting.png)
+![Create Meeting](/screenshots/Create_Meeting.png)
 
 
 ## ✨ Features
