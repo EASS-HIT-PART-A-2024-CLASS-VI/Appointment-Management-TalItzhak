@@ -7,7 +7,8 @@
   width: 85%;  /* Increased from 80% */
   max-width: 1000px;  /* Increased from 900px */
   height: 85vh;  /* Increased from 80vh */
-  background: var(--bg-secondary);
+  background: linear-gradient(to bottom right, var(--bg-secondary), rgba(59, 130, 246, 0.05));
+  border: 1px solid rgba(59, 130, 246, 0.1);
   border-radius: 16px;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
@@ -49,18 +50,19 @@
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 2px solid rgba(59, 130, 246, 0.1);
 }
 
 .header h2 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--accent-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .back-button {
-  background: none;
+  background: rgba(59, 130, 246, 0.1);
   border: none;
   color: var(--accent-primary);
   cursor: pointer;
@@ -70,11 +72,12 @@
   font-size: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .back-button:hover {
-  background: var(--accent-hover);
+  background: rgba(59, 130, 246, 0.2);
+  transform: translateX(-2px);
 }
 
 .close-button {
@@ -100,25 +103,52 @@
   padding-right: 0.5rem;
 }
 
+.businesses-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.businesses-grid::-webkit-scrollbar-track {
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 4px;
+}
+
+.businesses-grid::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 4px;
+}
+
+.businesses-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
 .business-card {
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;  /* Increased from 1.25rem */
   border-radius: 12px;
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 .business-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 15px rgba(59, 130, 246, 0.15);
 }
 
 .business-info h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  font-size: 1.5rem; 
+  font-weight: 600; 
+  color: var(--text-primary); 
+  text-align: center; 
+  margin: 0.5rem 0; 
+  letter-spacing: 0.5px; 
+  transition: color 0.2s ease; 
+}
+.business-info h3:hover {
+  color: var(--accent-primary); 
 }
 
 .owner-name {
@@ -128,8 +158,13 @@
 }
 
 .services-count {
-  color: var(--text-tertiary);
+  color: var(--accent-primary);
   font-size: 0.9rem;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  display: inline-block;
+  font-weight: 500;
   margin-bottom: 1rem;
 }
 
@@ -189,14 +224,17 @@
 }
 
 .book-button {
-  background: var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary), #60a5fa);
   color: white;
   border: none;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
 }
 
 .book-button:hover {
-  background: var(--accent-secondary);
+  background: linear-gradient(135deg, #60a5fa, var(--accent-primary));
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 .submit-button {
@@ -228,7 +266,8 @@
 
 /* Search Section */
 .search-container {
-  margin-bottom: 1.5rem;
+  position: relative;
+  margin-bottom: 2rem;
   display: flex;
   gap: 1rem;
 }
@@ -236,28 +275,36 @@
 .search-input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--border-color);
+  border: 2px solid rgba(59, 130, 246, 0.1);
   border-radius: 8px;
   font-size: 0.95rem;
-  background: var(--bg-tertiary);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-primary);
   transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .search-button {
   padding: 0.75rem 1.5rem;
-  background: var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary), #60a5fa);
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
 .search-button:hover {
-  background: var(--accent-secondary);
+  background: linear-gradient(135deg, #60a5fa, var(--accent-primary));
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 /* Availability Section */
@@ -315,6 +362,18 @@
   color: var(--accent-primary);
 }
 
+/* Add animation for cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .business-list-container {
@@ -339,7 +398,7 @@
     padding: 1.5rem;  /* Increased from 1rem */
     margin-bottom: 1.5rem;  /* Increased from 1rem */
   }
-  
+
   .header h2 {
     font-size: 1.4rem;  /* Increased from 1.25rem */
   }
