@@ -12,4 +12,5 @@ pandas
 openpyxl
 python-multipart
 python-dotenv
+openai==1.12.0
 

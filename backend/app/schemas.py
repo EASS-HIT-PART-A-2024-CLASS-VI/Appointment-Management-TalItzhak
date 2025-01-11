@@ -156,3 +156,6 @@ class PaginatedResponse(BaseModel):
 # Required for forward references
 TopicResponse.model_rebuild()
 ServiceResponse.model_rebuild()
+
+class SearchQuery(BaseModel):
+    query: str

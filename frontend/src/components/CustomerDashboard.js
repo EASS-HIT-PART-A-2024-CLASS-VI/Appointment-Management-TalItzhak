@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import MyAppointmentViewer from './MyAppointmentViewer';
-import BusinessList from './BusinessList';
+import BookAppointmentList from './BookAppointmentList';
+import AllBusinessesList from './AllBusinessesList';
 import { Calendar, Building, LogOut, PlusCircle } from 'lucide-react';
 import '../styles/CustomerDashboard.css';
 
@@ -92,10 +93,11 @@ const CustomerDashboard = () => {
           <MyAppointmentViewer onClose={() => setActiveView('dashboard')} />
         )}
         {activeView === 'create-meeting' && (
-          <BusinessList onClose={() => setActiveView('dashboard')} viewType="create" />
+        <BookAppointmentList onClose={() => setActiveView('dashboard')} />
         )}
+
         {activeView === 'businesses' && (
-          <BusinessList onClose={() => setActiveView('dashboard')} viewType="availability" />
+        <AllBusinessesList onClose={() => setActiveView('dashboard')} />
         )}
       </div>
     </div>

@@ -50,109 +50,108 @@ const Register = () => {
             alt="Appointment Management" 
             className="logo"
           />
-          <h1 className="app-title">Appointment Management</h1>
+          <h1 className="app-title">APPOINTMENT MANAGEMENT</h1>
           <p className="app-subtitle">Smart and swift, your time's best gift</p>
         </div>
 
-        <div className="main-content">
-          <div className="form-section">
-            <form onSubmit={handleSubmit}>
-              {error && <div className="error">{error}</div>}
-              <div className="input-group">
-                <div className="name-row">
-                  <input
-                    type="text"
-                    placeholder="First Name"
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    required
-                    className="form-input"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Last Name"
-                    value={formData.lastName}
-                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                    required
-                    className="form-input"
-                  />
-                </div>
-
+        <div className="form-container">
+          <form onSubmit={handleSubmit}>
+            {error && <div className="error">{error}</div>}
+            
+            <div className="input-group">
+              <div className="name-row">
                 <input
                   type="text"
-                  placeholder="Username"
-                  value={formData.username}
-                  onChange={(e) => setFormData({...formData, username: e.target.value})}
+                  placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                   required
                   className="form-input"
                 />
-
                 <input
-                  type="tel"
-                  placeholder="Phone"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  required
-                  className="form-input"
-                />
-
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  type="text"
+                  placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                   required
                   className="form-input"
                 />
               </div>
 
-              <div className="role-buttons">
-                <button
-                  type="button"
-                  className={`role-button ${formData.role === 'customer' ? 'active' : ''}`}
-                  onClick={() => setFormData({...formData, role: 'customer'})}
-                >
-                  Client
-                </button>
-                <button
-                  type="button"
-                  className={`role-button ${formData.role === 'business_owner' ? 'active' : ''}`}
-                  onClick={() => setFormData({...formData, role: 'business_owner'})}
-                >
-                  Business Owner
-                </button>
-              </div>
+              <input
+                type="text"
+                placeholder="Username"
+                value={formData.username}
+                onChange={(e) => setFormData({...formData, username: e.target.value})}
+                required
+                className="form-input"
+              />
 
-              {formData.role === 'business_owner' && (
-                <div className="input-group">
-                  <input
-                    type="text"
-                    placeholder="Business Name"
-                    value={formData.businessName}
-                    onChange={(e) => setFormData({...formData, businessName: e.target.value})}
-                    required
-                    className="form-input"
-                  />
-                </div>
-              )}
+              <input
+                type="tel"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                required
+                className="form-input"
+              />
 
-              <button type="submit" className="primary-button">
-                Register
-              </button>
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                required
+                className="form-input"
+              />
+            </div>
 
-              <div className="divider">
-                <span>Already have an account?</span>
-              </div>
-
+            <div className="role-buttons">
               <button
                 type="button"
-                onClick={() => navigate('/login')}
-                className="secondary-button"
+                className={`role-button ${formData.role === 'customer' ? 'active' : ''}`}
+                onClick={() => setFormData({...formData, role: 'customer'})}
               >
-                Login here
+                Client
               </button>
-            </form>
-          </div>
+              <button
+                type="button"
+                className={`role-button ${formData.role === 'business_owner' ? 'active' : ''}`}
+                onClick={() => setFormData({...formData, role: 'business_owner'})}
+              >
+                Business Owner
+              </button>
+            </div>
+
+            {formData.role === 'business_owner' && (
+              <div className="input-group">
+                <input
+                  type="text"
+                  placeholder="Business Name"
+                  value={formData.businessName}
+                  onChange={(e) => setFormData({...formData, businessName: e.target.value})}
+                  required
+                  className="form-input"
+                />
+              </div>
+            )}
+
+            <button type="submit" className="primary-button">
+              Register
+            </button>
+
+            <div className="divider">
+              <span>Already have an account?</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="secondary-button"
+            >
+              Login here
+            </button>
+          </form>
         </div>
       </div>
     </div>

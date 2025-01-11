@@ -1,125 +1,156 @@
-.business-list {
+/* src/styles/CreateMeeting.css */
+.create-meeting-modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
-  max-width: 1200px;
+  max-width: 600px;
   background: var(--bg-secondary);
-  padding: 30px;
-  border-radius: 20px;
+  padding: 2rem;
+  border-radius: 16px;
   box-shadow: var(--shadow-lg);
   max-height: 90vh;
   overflow-y: auto;
-  color: var(--text-primary);
-  transition: all 0.3s ease;
+  z-index: 1000;
 }
 
-.businesses-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px 0;
-}
-
-.business-card {
-  background: var(--bg-tertiary);
-  padding: 20px;
-  border-radius: 12px;
+.modal-header {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.business-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.business-name {
-  font-size: 18px;
-  font-weight: bold;
+.modal-header h3 {
+  margin: 0;
   color: var(--text-primary);
-  margin: 0;
-}
-
-.owner-name {
-  font-size: 16px;
-  color: var(--text-secondary);
-  margin: 5px 0 10px;
-  font-weight: 500;
-}
-
-.business-details {
-  color: var(--text-tertiary);
-  margin: 0;
-  font-size: 14px;
-}
-
-.business-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.action-button {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent-primary);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-}
-
-.action-button:hover {
-  background: var(--accent-secondary);
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 24px;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  background: var(--bg-tertiary);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-tertiary);
+  cursor: pointer;
   color: var(--text-secondary);
-  transition: all 0.3s ease;
-  border: none;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
 }
 
 .close-button:hover {
   background: var(--accent-hover);
+  color: var(--accent-primary);
 }
 
-h2 {
-  text-align: center;
-  color: var(--text-primary);
-  margin-bottom: 30px;
-  font-size: 24px;
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.loading {
-  text-align: center;
-  padding: 20px;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
   color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-.error-message {
+.form-input {
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-hover);
+}
+
+select.form-input {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+.submit-button {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.submit-button:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-1px);
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.alert-error {
   background: var(--error-bg);
   color: var(--error-text);
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
   border: 1px solid var(--error-text);
+}
+
+.alert-success {
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-text);
+}
+
+@media (max-width: 640px) {
+  .create-meeting-modal {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.25rem;
+  }
 }

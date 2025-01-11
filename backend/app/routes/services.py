@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+import re
 from typing import List
 from app.models import Topic, Service
 from app.models import Availability
+from openai import OpenAI
 from app.schemas import (
     TopicCreate, 
     TopicUpdate, 
@@ -10,10 +12,15 @@ from app.schemas import (
     ServiceCreate, 
     ServiceUpdate, 
     ServiceResponse,
-    BusinessResponse
+    BusinessResponse,
+    SearchQuery
 )
 from app.dependencies import get_db, business_owner_required, get_current_user
 from app.models import User
+from app.models import Service
+from sqlalchemy import or_
+
+
 
 router = APIRouter()
 
@@ -168,4 +175,99 @@ def delete_service(
     
     return {"message": f"Service '{service.name}' and all its topics have been deleted successfully"}
 
-    
+
+
+# routes/services.py
+
+
+@router.post("/smart-service-search", response_model=List[BusinessResponse])
+async def smart_service_search(
+    search_query: SearchQuery,
+    db: Session = Depends(get_db)
+):
+    try:
+        # Normalize search query
+        search_text = search_query.query.lower()
+        
+        # Extract keywords from search query
+        keywords = re.findall(r'\w+', search_text)
+        
+        if not keywords:
+            raise HTTPException(status_code=400, detail="Search query is required")
+
+        # Create filters for each keyword
+        service_filters = []
+        business_filters = []
+        
+        # Common word substitutions
+        word_substitutions = {
+            'fix': ['repair', 'restore', 'mend', 'service'],
+            'repair': ['fix', 'restore', 'mend', 'service'],
+            'screen': ['display', 'monitor', 'lcd'],
+            'phone': ['mobile', 'smartphone', 'device', 'cellular'],
+        }
+
+        # Add filters for original keywords and their substitutions
+        for keyword in keywords:
+            # Add original keyword
+            service_filters.append(Service.name.ilike(f'%{keyword}%'))
+            business_filters.append(User.business_name.ilike(f'%{keyword}%'))
+
+            # Add substitutions if they exist
+            if keyword in word_substitutions:
+                for substitute in word_substitutions[keyword]:
+                    service_filters.append(Service.name.ilike(f'%{substitute}%'))
+
+        # Query for businesses that match any of the filters
+        businesses = db.query(User).filter(
+            User.role == "business_owner"
+        ).filter(
+            or_(
+                # Match business name
+                or_(*business_filters),
+                # Match service name
+                User.services.any(or_(*service_filters))
+            )
+        ).all()
+
+        # Sort businesses by relevance
+        def calculate_relevance(business):
+            relevance_score = 0
+            
+            # Check business name
+            if any(keyword in business.business_name.lower() for keyword in keywords):
+                relevance_score += 10
+                
+            # Check services
+            for service in business.services:
+                service_name = service.name.lower()
+                # Direct keyword matches
+                for keyword in keywords:
+                    if keyword in service_name:
+                        relevance_score += 5
+                    # Substitution matches
+                    if keyword in word_substitutions:
+                        for substitute in word_substitutions[keyword]:
+                            if substitute in service_name:
+                                relevance_score += 3
+                
+                # Exact phrase match gives bonus points
+                if search_text in service_name:
+                    relevance_score += 15
+                    
+            return relevance_score
+
+        # Sort businesses by relevance score
+        sorted_businesses = sorted(
+            businesses,
+            key=calculate_relevance,
+            reverse=True
+        )
+
+        # Filter out businesses with zero relevance
+        relevant_businesses = [b for b in sorted_businesses if calculate_relevance(b) > 0]
+
+        return relevant_businesses
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
