@@ -7,7 +7,7 @@ import '../styles/Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -37,11 +37,17 @@ const Login = () => {
   };
 
   return (
-    <div className={`login-container ${!isDark ? 'light-mode' : ''}`}>
-
+    <div className={`login-container ${isDark ? 'dark-mode' : ''}`}>
       <div className="content-wrapper">
         <div className="logo-section">
-          <img src="/logo.png" alt="Appointment Management" className="logo" />
+          <div className="logo-container"> {/* Added container div */}
+            <img 
+              src="/logo.png" 
+              alt="Appointment Management" 
+              style={{ width: '400px', height: 'auto' }} // Added inline style
+              className="logo"
+            />
+          </div>
           <h1 className="app-title">APPOINTMENT MANAGEMENT</h1>
           <p className="app-subtitle">Smart and swift, your time's best gift</p>
         </div>

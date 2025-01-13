@@ -1,30 +1,33 @@
 /* src/styles/Login.css */
 .login-container {
   min-height: 100vh;
-  background: #1a1f2e;
-  color: #ffffff;
+  width: 100%;
+  background: #f5f7fa;  /* Light mode default */
+  color: #1a1f2e;
   display: flex;
   flex-direction: column;
   position: relative;
+  transition: all 0.3s ease;
 }
 
-.login-container.light-mode {
-  background: #f5f7fa;
-  color: #1a1f2e;
+.login-container.dark-mode {
+  background: #1a1f2e;
+  color: #ffffff;
 }
 
 .theme-toggle {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
+  z-index: 1000;
 }
 
 .theme-button {
   padding: 12px 24px;
   border-radius: 20px;
   border: none;
-  background: #3b82f6; /* Default background color */
-  color: white; /* Default text color */
+  background: #3b82f6;
+  color: white;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -35,9 +38,8 @@
 }
 
 .theme-button:hover {
-  background: #2563eb; /* Slightly darker blue on hover */
-  color: white; /* Keep text color consistent */
-  transform: translateY(-2px); /* Hover effect */
+  background: #2563eb;
+  transform: translateY(-2px);
 }
 
 .content-wrapper {
@@ -55,39 +57,48 @@
 .logo-section {
   text-align: center;
   margin-bottom: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo {
-  max-width: 300px;
+  width: 200px;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  object-fit: contain;
+  transition: all 0.3s ease;
 }
 
 .app-title {
-  font-size: 2rem;
   color: #3b82f6;
-  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  letter-spacing: 1px;
 }
 
 .app-subtitle {
   color: #94a3b8;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   margin: 0;
+  font-weight: 500;
 }
 
 .form-container {
   width: 100%;
   max-width: 400px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.light-mode .form-container {
-  background: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+.dark-mode .form-container {
+  background: #1e293b;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .login-form {
@@ -106,17 +117,17 @@
   width: 100%;
   padding: 15px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #1a1f2e;
   font-size: 16px;
   transition: all 0.3s ease;
 }
 
-.light-mode .form-input {
-  border: 1px solid #e2e8f0;
-  background: white;
-  color: #1a1f2e;
+.dark-mode .form-input {
+  background: #2a3548;
+  border-color: #4a5568;
+  color: white;
 }
 
 .form-input:focus {
@@ -136,7 +147,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 20px; /* Matches the Register button style */
+  margin-bottom: 20px;
 }
 
 .primary-button:hover {
@@ -157,7 +168,13 @@
   top: 50%;
   width: 45%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .divider::before,
+.dark-mode .divider::after {
+  background: #4a5568;
 }
 
 .divider::before {
@@ -168,20 +185,17 @@
   right: 0;
 }
 
-.light-mode .divider::before,
-.light-mode .divider::after {
-  background: #e2e8f0;
-}
-
 .divider span {
-  background: #1a1f2e;
   padding: 0 10px;
   color: #94a3b8;
   font-size: 14px;
+  background: white;
+  transition: all 0.3s ease;
 }
 
-.light-mode .divider span {
-  background: #f5f7fa;
+.dark-mode .divider span {
+  background: #1e293b;
+  color: #cbd5e1;
 }
 
 .secondary-button {
@@ -204,28 +218,56 @@
 }
 
 .error-message {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: #fee2e2;
+  color: #dc2626;
   padding: 15px;
   border-radius: 10px;
   text-align: center;
   font-size: 14px;
 }
 
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .content-wrapper {
     padding: 20px;
   }
 
+  .logo {
+    width: 150px;
+  }
+  
+  .app-title {
+    font-size: 2rem;
+  }
+
+  .app-subtitle {
+    font-size: 1.1rem;
+  }
+
   .form-container {
     padding: 30px 20px;
   }
+}
 
+@media (max-width: 480px) {
+  .logo {
+    width: 120px;
+  }
+  
   .app-title {
     font-size: 1.8rem;
   }
 
   .app-subtitle {
     font-size: 1rem;
+  }
+
+  .form-container {
+    padding: 20px;
+  }
+
+  .theme-button {
+    padding: 8px 16px;
+    font-size: 14px;
   }
 }

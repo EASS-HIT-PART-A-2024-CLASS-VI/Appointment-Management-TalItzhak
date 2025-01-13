@@ -1,5 +1,7 @@
+// src/components/DailyStatsManager.js
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { Calendar } from 'lucide-react';
 import '../styles/DailyStatsManager.css';
 
 const DailyStatsManager = ({ onClose }) => {
@@ -8,6 +10,14 @@ const DailyStatsManager = ({ onClose }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const formatDateForAPI = (dateString) => {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+  };
 
   const fetchDailyStats = async (date) => {
     try {
@@ -36,14 +46,6 @@ const DailyStatsManager = ({ onClose }) => {
     }
   };
 
-  const formatDateForAPI = (dateString) => {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${month}-${day}-${year}`;
-  };
-
   const formatDateForDisplay = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -69,50 +71,54 @@ const DailyStatsManager = ({ onClose }) => {
   };
 
   return (
-    <div className={`daily-stats-manager ${!isDark ? 'light-mode' : ''}`}>
-      <div className="close-button" onClick={onClose}>×</div>
-      
-      <h2>Daily Statistics</h2>
-
-      <div className="date-selector">
-        <label>Select Date:</label>
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={handleDateChange}
-        />
+    <div className={`daily-stats-container ${!isDark ? 'light-mode' : ''}`}>
+      <div className="stats-header">
+        <div className="header-content">
+          <h2>Daily Statistics</h2>
+          <div className="date-selector">
+            <Calendar className="calendar-icon" size={20} />
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              className="date-input"
+            />
+          </div>
+        </div>
+        <button className="close-button" onClick={onClose}>×</button>
       </div>
 
-      {loading && (
+      {loading ? (
         <div className="loading-state">
-          Loading statistics...
+          <div className="spinner"></div>
+          <span>Loading statistics...</span>
         </div>
-      )}
-
-      {error && (
+      ) : error ? (
         <div className="error-message">
           {error}
         </div>
-      )}
-
-      {stats && (
-        <div className="stats-container">
-          <div className="stats-header">
-            <h3>{formatDateForDisplay(stats.date)}</h3>
+      ) : stats && (
+        <div className="stats-content">
+          <div className="stats-date">
+            {formatDateForDisplay(stats.date)}
           </div>
 
-          <div className="stats-grid">
-            <div className="stat-card total-revenue">
-              <div className="stat-title">Total Revenue</div>
-              <div className="stat-value">{formatCurrency(stats.total_revenue)}</div>
-            </div>
+          <div className="total-revenue-card">
+            <div className="card-label">Total Revenue</div>
+            <div className="revenue-amount">{formatCurrency(stats.total_revenue)}</div>
+          </div>
 
+          <div className="services-grid">
             {Object.entries(stats.services).map(([serviceName, serviceData]) => (
-              <div key={serviceName} className="stat-card">
-                <div className="stat-title">{serviceName}</div>
-                <div className="stat-details">
-                  <div>Appointments: {serviceData.count}</div>
-                  <div>Revenue: {formatCurrency(serviceData.revenue)}</div>
+              <div key={serviceName} className="service-card">
+                <div className="service-header">
+                  <h3>{serviceName}</h3>
+                  <span className="appointment-count">
+                    {serviceData.count} appointment{serviceData.count !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div className="service-revenue">
+                  {formatCurrency(serviceData.revenue)}
                 </div>
               </div>
             ))}
