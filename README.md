@@ -1,11 +1,14 @@
 # 🗓️ Appointment Management System
 
+<img src="screenshots/logo.png" alt="logo" width="650"/>
+
+
 A full-stack appointment scheduling application built with FastAPI and React, featuring a dark/light theme and role-based access control.
 
 ## 🖼️ Screenshots
 
-## Login and Registration
-<img src="screenshots/RegisterPage.png" alt="Register Page" width="650"/>
+## Login 
+<img src="screenshots/LoginPage.png" alt="Login Page" width="650"/>
 
 ## Business Management
 <img src="screenshots/My_Bussiness_Appointments.png" alt="Business Appointments" width="650"/>
