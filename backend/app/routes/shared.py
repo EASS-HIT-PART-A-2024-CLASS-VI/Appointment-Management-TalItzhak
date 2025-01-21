@@ -1,18 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.schemas import AppointmentCreate, AppointmentUpdate, UserResponse
-from app.models import appointments, Service
+from app.models import Service, Appointment, Availability, User, Topic
 from app.utils import is_time_conflict
 from app.dependencies import get_current_user
-from app.models import Topic
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models import Appointment
 from datetime import datetime, timedelta 
 from sqlalchemy import and_
-from app.models import Availability, Service
+from app.models import Availability, Service, User
 from typing import List
 from app.schemas import AppointmentResponse
-from app.models import User
 from app.schemas import UserResponse
 from sqlalchemy.sql import text
 

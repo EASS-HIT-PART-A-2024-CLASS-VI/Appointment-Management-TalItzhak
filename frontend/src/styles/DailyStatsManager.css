@@ -11,6 +11,7 @@
   padding: 2rem;
   max-height: 90vh;
   overflow-y: auto;
+  z-index: 1000;
 }
 
 .stats-header {
@@ -38,23 +39,25 @@
   -webkit-text-fill-color: transparent;
 }
 
-.date-selector {
+.date-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   background: #f3f4f6;
   padding: 0.5rem 1rem;
   border-radius: 12px;
+  position: relative;
   transition: all 0.2s ease;
 }
 
-.date-selector:focus-within {
+.date-wrapper:focus-within {
   background: white;
   box-shadow: 0 0 0 2px #3b82f6, 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .calendar-icon {
   color: #6b7280;
+  position: absolute;
+  left: 1rem;
 }
 
 .date-input {
@@ -63,7 +66,19 @@
   color: #1f2937;
   font-size: 1rem;
   padding: 0.5rem;
+  padding-left: 2.5rem;
   cursor: pointer;
+  min-width: 150px;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .date-input:focus {
@@ -90,131 +105,14 @@
   color: #1f2937;
 }
 
-.stats-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+/* Rest of your existing CSS styles... */
 
-.stats-date {
-  font-size: 1.4rem;
-  color: #4b5563;
-  font-weight: 500;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.total-revenue-card {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  padding: 2rem;
-  border-radius: 16px;
-  color: white;
-  text-align: center;
-  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
-}
-
-.card-label {
-  font-size: 1.1rem;
-  opacity: 0.9;
-  margin-bottom: 0.5rem;
-}
-
-.revenue-amount {
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.service-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.2s ease;
-}
-
-.service-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-  border-color: #3b82f6;
-}
-
-.service-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.service-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #1f2937;
-  font-weight: 600;
-}
-
-.appointment-count {
-  background: #eef2ff;
-  color: #4f46e5;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.service-revenue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1f2937;
-}
-
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 3rem;
-  color: #6b7280;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f3f4f6;
-  border-top: 4px solid #3b82f6;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.error-message {
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 1rem;
-  border-radius: 12px;
-  text-align: center;
-  margin: 1rem 0;
-}
-
-/* Dark mode styles */
+/* Dark mode modifications */
 .dark-mode {
   background: #1a1f2e;
 }
 
-.dark-mode .stats-header {
-  border-color: #374151;
-}
-
-.dark-mode .date-selector {
+.dark-mode .date-wrapper {
   background: #2a3548;
 }
 
@@ -222,51 +120,22 @@
   color: white;
 }
 
-.dark-mode .close-button {
-  background: #2a3548;
+.dark-mode .calendar-icon {
   color: #9ca3af;
 }
 
-.dark-mode .close-button:hover {
-  background: #374151;
-  color: white;
-}
-
-.dark-mode .service-card {
-  background: #1e293b;
-  border-color: #374151;
-}
-
-.dark-mode .service-header h3 {
-  color: white;
-}
-
-.dark-mode .service-revenue {
-  color: white;
-}
-
-.dark-mode .stats-date {
-  color: #9ca3af;
-}
-
-/* Responsive styles */
 @media (max-width: 768px) {
-  .daily-stats-container {
-    width: 95%;
-    padding: 1.5rem;
-  }
-
   .header-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-
-  .services-grid {
-    grid-template-columns: 1fr;
+  
+  .date-wrapper {
+    width: 100%;
   }
-
-  .revenue-amount {
-    font-size: 2rem;
+  
+  .date-input {
+    width: 100%;
   }
 }

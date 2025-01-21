@@ -2,10 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
-
 from app.schemas import AppointmentResponse
-from app.models import Appointment, User, appointments,Service
-from app.utils import search_appointment_by_phone_and_name
+from app.models import Appointment, User, Service
 from app.dependencies import get_db, check_user_role, get_current_user
 from sqlalchemy import and_, text
 from typing import List

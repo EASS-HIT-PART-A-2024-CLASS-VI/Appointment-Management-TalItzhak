@@ -91,3 +91,8 @@ export const getAuthHeader = () => {
   const token = localStorage.getItem('token');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 };
+// frontend/src/services/api.js
+export const API_CONFIG = {
+  BACKEND: 'http://localhost:8000',
+  CUSTOMER_SERVICE: 'http://localhost:8001'
+};

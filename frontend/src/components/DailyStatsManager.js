@@ -1,4 +1,3 @@
-// src/components/DailyStatsManager.js
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Calendar } from 'lucide-react';
@@ -71,17 +70,18 @@ const DailyStatsManager = ({ onClose }) => {
   };
 
   return (
-    <div className={`daily-stats-container ${!isDark ? 'light-mode' : ''}`}>
+    <div className={`daily-stats-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
       <div className="stats-header">
         <div className="header-content">
           <h2>Daily Statistics</h2>
-          <div className="date-selector">
+          <div className="date-wrapper">
             <Calendar className="calendar-icon" size={20} />
             <input
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
               className="date-input"
+              max={new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>

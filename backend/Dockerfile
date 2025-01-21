@@ -1,14 +1,28 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    default-libmysqlclient-dev \
+    build-essential \
+    curl \
+    pkg-config && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY . /app
+# Copy requirements first for better caching
+COPY requirements.txt .
 
-# Run database creation script
-RUN python create_db.py
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copy the rest of the application
+COPY . .
+
+# Expose the port
+EXPOSE 8000
+
+# Command is now in docker-compose.yml
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

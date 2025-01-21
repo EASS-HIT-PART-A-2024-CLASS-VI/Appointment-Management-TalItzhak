@@ -9,8 +9,8 @@ python-jose[cryptography]
 PyJWT
 xlsxwriter
 pandas
-openpyxl
 python-multipart
 python-dotenv
 openai==1.12.0
-
+pymysql
+cryptography  

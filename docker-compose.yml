@@ -1,21 +1,72 @@
-version: '3.8'
-
 services:
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: appointment_backend
     ports:
       - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_NAME=appointmentdb
+      - DB_USER=appointment_user
+      - DB_PASSWORD=appointment_password
+      - SECRET_KEY=your_secret_key_here
     volumes:
       - ./backend:/app
+    command: sh -c "sleep 15 && python create_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --workers 1"
+    networks:
+      - appointment_network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      - MYSQL_DATABASE=appointmentdb
+      - MYSQL_USER=appointment_user
+      - MYSQL_PASSWORD=appointment_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - appointment_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "appointment_user", "-pappointment_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: appointment_frontend
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+    command: npm start
+    networks:
+      - appointment_network
     depends_on:
       - backend
+
+networks:
+  appointment_network:
+    driver: bridge
+
+volumes:
+  mysql_data:

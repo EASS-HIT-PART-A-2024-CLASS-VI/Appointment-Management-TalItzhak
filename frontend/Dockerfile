@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 WORKDIR /app
 
@@ -10,5 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-# Use npm start for development
 CMD ["npm", "start"]
