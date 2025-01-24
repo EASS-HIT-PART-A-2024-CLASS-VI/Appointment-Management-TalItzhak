@@ -1,7 +1,16 @@
-// src/components/BusinessAvailability.js
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import '../styles/BusinessAvailability.css';
+
+const DAYS_ORDER = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+];
 
 const BusinessAvailability = ({ businessId, onClose }) => {
   const { isDark } = useTheme();
@@ -52,8 +61,13 @@ const BusinessAvailability = ({ businessId, onClose }) => {
     }
   };
 
-  // Order of days starting from Sunday
-  const daysOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  // Function to get all days sorted with their availability
+  const getSortedAvailability = () => {
+    return DAYS_ORDER.map(day => ({
+      day,
+      timeSlots: processedAvailability[day] || []
+    })).filter(dayData => dayData.timeSlots.length > 0);
+  };
 
   return (
     <div className={`availability-viewer ${!isDark ? 'light-mode' : ''}`}>
@@ -70,24 +84,20 @@ const BusinessAvailability = ({ businessId, onClose }) => {
         <div className="loading">Loading availability...</div>
       ) : (
         <div className="availability-grid">
-          {daysOrder.map(day => {
-            if (!processedAvailability[day]) return null;
-
-            return (
-              <div key={day} className="availability-card">
-                <div className="day-header">
-                  <h3 className="day-name">{day}</h3>
-                </div>
-                <div className="time-slots">
-                  {processedAvailability[day].map((slot, index) => (
-                    <div key={index} className="time-slot">
-                      {slot.start.slice(0, 5)} - {slot.end.slice(0, 5)}
-                    </div>
-                  ))}
-                </div>
+          {getSortedAvailability().map(({ day, timeSlots }) => (
+            <div key={day} className="availability-card">
+              <div className="day-header">
+                <h3 className="day-name">{day}</h3>
               </div>
-            );
-          })}
+              <div className="time-slots">
+                {timeSlots.map((slot, index) => (
+                  <div key={index} className="time-slot">
+                    {slot.start.slice(0, 5)} - {slot.end.slice(0, 5)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

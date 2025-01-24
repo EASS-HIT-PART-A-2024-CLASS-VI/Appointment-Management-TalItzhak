@@ -1,5 +1,4 @@
-// AppointmentsManager.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import '../styles/AppointmentsManager.css';
 
@@ -12,11 +11,7 @@ const AppointmentsManager = ({ onClose }) => {
  const [successMessage, setSuccessMessage] = useState('');
  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
- useEffect(() => {
-   fetchAppointments();
- }, []);
-
- const fetchAppointments = async () => {
+ const fetchAppointments = useCallback(async () => {
    try {
      const response = await fetch(`${API_URL}/api/business/my-appointments`, {
        headers: {
@@ -33,7 +28,6 @@ const AppointmentsManager = ({ onClose }) => {
      }
      
      const data = await response.json();
-     // Sort appointments by date and time - closest first
      const sortedAppointments = data.sort((a, b) => {
        const dateA = new Date(`${a.date} ${a.start_time}`);
        const dateB = new Date(`${b.date} ${b.start_time}`);
@@ -47,7 +41,11 @@ const AppointmentsManager = ({ onClose }) => {
    } finally {
      setLoading(false);
    }
- };
+ }, [API_URL]);
+
+ useEffect(() => {
+   fetchAppointments();
+ }, [fetchAppointments]);
 
  const handleDelete = async (appointmentId) => {
    if (!window.confirm('Are you sure you want to delete this appointment?')) {
@@ -111,7 +109,6 @@ const AppointmentsManager = ({ onClose }) => {
    return timeString.slice(0, 5);
  };
 
- // Group appointments by date after they're loaded
  const groupedAppointments = appointments.length > 0 
    ? appointments.reduce((groups, appointment) => {
        const date = appointment.date;

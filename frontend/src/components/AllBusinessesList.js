@@ -12,6 +12,8 @@ const AllBusinessesList = ({ onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [availability, setAvailability] = useState([]);
 
+
+  
   useEffect(() => {
     fetchBusinesses();
   }, []);
