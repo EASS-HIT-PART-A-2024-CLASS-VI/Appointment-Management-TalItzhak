@@ -14,3 +14,4 @@ python-dotenv
 openai==1.12.0
 pymysql
 cryptography  
+httpx==0.23.0
