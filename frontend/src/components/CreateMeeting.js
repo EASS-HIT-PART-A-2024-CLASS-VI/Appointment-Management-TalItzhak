@@ -1,4 +1,3 @@
-// src/components/CreateMeeting.js
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import '../styles/CreateMeeting.css';
@@ -100,7 +99,15 @@ const CreateMeeting = ({ business, onClose }) => {
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.detail || 'Failed to create appointment');
+        if (data.detail === 'Time slot not available') {
+          throw new Error('The selected time is not available. Please choose another time.');
+        } else if (data.detail === 'Business not available') {
+          throw new Error('Business is not available during these hours. Please select a different time.');
+        } else if (data.detail === 'Overlapping appointment') {
+          throw new Error('There is another appointment at this time. Please select a different time.');
+        } else {
+          throw new Error(data.detail || 'Unable to create appointment. Please try again.');
+        }
       }
 
       setSuccess('Appointment created successfully!');
@@ -120,9 +127,15 @@ const CreateMeeting = ({ business, onClose }) => {
         <button className="close-button" onClick={onClose}>×</button>
       </div>
 
-      {(error || success) && (
-        <div className={`alert ${error ? 'alert-error' : 'alert-success'}`}>
-          {error || success}
+      {error && (
+        <div className="alert alert-error">
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="alert alert-success">
+          {success}
         </div>
       )}
 

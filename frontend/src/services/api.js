@@ -1,17 +1,17 @@
 const API_URL = 'http://localhost:8000';
-const LLM_URL = 'http://localhost:8001';
+const LLM_URL = 'http://llm_service:8001';
 
 const decodeToken = (token) => {
- try {
-   const base64Url = token.split('.')[1];
-   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-   const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
-     '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-   return JSON.parse(jsonPayload);
- } catch (error) {
-   console.error('Error decoding token:', error);
-   return null;
- }
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
 };
 
 export const loginUser = async (username, password) => {

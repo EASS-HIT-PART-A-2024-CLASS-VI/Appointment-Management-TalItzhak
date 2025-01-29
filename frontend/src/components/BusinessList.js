@@ -11,6 +11,7 @@ const BusinessList = ({ onClose }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [message, setMessage] = useState({ type: '', content: '' });
   const [appointmentData, setAppointmentData] = useState({
     date: '',
     start_time: '',
@@ -95,6 +96,8 @@ const BusinessList = ({ onClose }) => {
 
   const handleCreateAppointment = async (e) => {
     e.preventDefault();
+    setMessage({ type: '', content: '' });
+    
     try {
       const response = await fetch(
         `http://localhost:8000/api/shared/appointments?business_id=${selectedBusiness.id}`,
@@ -108,28 +111,51 @@ const BusinessList = ({ onClose }) => {
         }
       );
 
-      if (!response.ok) throw new Error('Failed to create appointment');
+      const data = await response.json();
       
-      // Reset form and selection
-      setSelectedBusiness(null);
-      setAppointmentData({
-        date: '',
-        start_time: '',
-        title: '',
-        customer_name: '',
-        customer_phone: ''
+      if (!response.ok) {
+        if (data.detail === 'Time slot not available' || 
+            data.detail === 'Business not available' || 
+            data.detail === 'Overlapping appointment') {
+          setMessage({
+            type: 'error',
+            content: 'This time slot is not available. Please select a different time.'
+          });
+        } else {
+          throw new Error(data.detail || 'Unable to create appointment');
+        }
+        return;
+      }
+
+      setMessage({
+        type: 'success',
+        content: 'Your appointment has been successfully scheduled!'
       });
-      
-      // Show success message
-      alert('Appointment created successfully!');
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        setSelectedBusiness(null);
+        setAppointmentData({
+          date: '',
+          start_time: '',
+          title: '',
+          customer_name: '',
+          customer_phone: ''
+        });
+      }, 3000);
+
     } catch (error) {
-      setError(error.message);
+      setMessage({
+        type: 'error',
+        content: error.message || 'Failed to create appointment. Please try again.'
+      });
     }
   };
 
   const handleBack = () => {
     setSelectedBusiness(null);
     setError('');
+    setMessage({ type: '', content: '' });
   };
 
   return (
@@ -156,7 +182,7 @@ const BusinessList = ({ onClose }) => {
             {businesses
               .filter(business => 
                 business.business_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                business.services.some(service => 
+                business.services?.some(service => 
                   service.name.toLowerCase().includes(searchQuery.toLowerCase())
                 )
               )
@@ -268,6 +294,12 @@ const BusinessList = ({ onClose }) => {
             <button type="submit" className="submit-button">
               Create Appointment
             </button>
+
+            {message.content && (
+              <div className={`message-banner ${message.type}`}>
+                {message.content}
+              </div>
+            )}
           </form>
         </div>
       )}

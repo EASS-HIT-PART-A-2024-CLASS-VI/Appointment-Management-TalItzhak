@@ -175,34 +175,86 @@ def delete_service(
     
     return {"message": f"Service '{service.name}' and all its topics have been deleted successfully"}
 
+def search_businesses(query: str, businesses_data: list) -> list:
+    """
+    Search for businesses based on query text.
+    Returns list of relevant businesses with their services.
+    """
+    query_terms = query.lower().split()
+    matching_businesses = []
+    
+    for business in businesses_data:
+        score = 0
+        business_text = (
+            f"{business.business_name or ''} "
+            f"{business.first_name or ''} "
+            f"{business.last_name or ''}"
+        ).lower()
+        
+        # Check business name match
+        for term in query_terms:
+            if term in business_text:
+                score += 1
+        
+        # Check services match
+        for service in business.services:
+            service_text = service.name.lower()
+            for term in query_terms:
+                if term in service_text:
+                    score += 2  # Services matches are weighted higher
+        
+        if score > 0:
+            matching_businesses.append({
+                "id": business.id,
+                "business_name": business.business_name,
+                "first_name": business.first_name,
+                "last_name": business.last_name,
+                "services": [
+                    {
+                        "id": s.id,
+                        "name": s.name,
+                        "duration": s.duration,
+                        "price": s.price
+                    } for s in business.services
+                ],
+                "score": score
+            })
+    
+    # Sort by relevance score
+    return sorted(matching_businesses, key=lambda x: x["score"], reverse=True)
+
+@router.get("/public/businesses", response_model=List[BusinessResponse])
+def get_all_businesses(db: Session = Depends(get_db)):
+    """Get all users who are business owners with their services"""
+    businesses = db.query(User).filter(User.role == "business_owner").all()
+    return businesses
+
+@router.get("/public/businesses/{business_id}/services", response_model=List[ServiceResponse])
+def get_business_services(business_id: int, db: Session = Depends(get_db)):
+    """Get all services for a specific business"""
+    services = db.query(Service).filter(Service.owner_id == business_id).all()
+    if not services:
+        raise HTTPException(status_code=404, detail="No services found for this business")
+    return services
+
 @router.post("/smart-service-search")
 async def smart_service_search(query: SearchQuery, db: Session = Depends(get_db)):
+    """
+    Search for businesses and services based on query text
+    """
     try:
-        businesses = db.query(User).filter(User.role == "business_owner").all()
-        businesses_data = [{
-            "id": b.id,
-            "business_name": b.business_name,
-            "first_name": b.first_name,
-            "last_name": b.last_name,
-            "services": [{
-                "id": s.id,
-                "name": s.name,
-                "duration": s.duration,
-                "price": s.price
-            } for s in b.services]
-        } for b in businesses]
-
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(
-                "http://llm_service:8001/analyze-query",
-                json={
-                    "query": query.query,
-                    "businesses": businesses_data
-                },
-                headers={"Content-Type": "application/json"}
-            )
-            response.raise_for_status()
-            return response.json()
+        # Get all businesses with their services
+        businesses = db.query(User).filter(
+            User.role == "business_owner"
+        ).all()
+        
+        # Perform search
+        matches = search_businesses(query.query, businesses)
+        
+        return {"matches": matches}
+        
     except Exception as e:
-        print(f"Error in smart search: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error performing search: {str(e)}"
+        )

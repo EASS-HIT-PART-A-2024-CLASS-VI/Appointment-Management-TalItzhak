@@ -1,3 +1,28 @@
+/* Global button fixes */
+button,
+.button,
+.submit-button,
+.action-button,
+.book-button,
+.create-appointment-button,
+input[type="submit"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+button:hover,
+.button:hover,
+.submit-button:hover,
+.action-button:hover,
+.book-button:hover,
+.create-appointment-button:hover,
+input[type="submit"]:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* Root theme variables */
 :root {
   /* Dark theme default colors */
@@ -9,8 +34,8 @@
   --text-tertiary: #94a3b8;
   --accent-primary: #3b82f6;
   --accent-secondary: #60a5fa;
-  --accent-hover: rgba(59, 130, 246, 0.1);
-  --card-bg: rgba(255, 255, 255, 0.05);
+  --accent-hover: rgba(59, 130, 246, 1); /* Changed from 0.1 to 1 for opacity */
+  --card-bg: rgba(255, 255, 255, 1); /* Changed from 0.05 to 1 */
   --border-color: rgba(255, 255, 255, 0.1);
   --error-bg: rgba(239, 68, 68, 0.1);
   --error-text: #ef4444;
@@ -23,6 +48,8 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --button-opacity: 1;
+  --button-hover-opacity: 1;
 }
 
 /* Light theme overrides */
@@ -39,6 +66,8 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+  --button-opacity: 1;
+  --button-hover-opacity: 1;
 }
 
 /* Base styles */
@@ -60,12 +89,13 @@ body {
   border: none;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   font-size: 0.95rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  opacity: var(--button-opacity) !important;
 }
 
 .button-primary {
@@ -76,6 +106,7 @@ body {
 .button-primary:hover {
   background: var(--accent-secondary);
   transform: translateY(-1px);
+  opacity: var(--button-hover-opacity) !important;
 }
 
 .button-secondary {

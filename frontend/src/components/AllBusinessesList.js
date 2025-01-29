@@ -1,4 +1,3 @@
-// src/components/AllBusinessesList.js
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import '../styles/BusinessList.css';
@@ -12,30 +11,38 @@ const AllBusinessesList = ({ onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [availability, setAvailability] = useState([]);
 
-
-  
   useEffect(() => {
     fetchBusinesses();
   }, []);
 
   const fetchBusinesses = async () => {
     try {
+      setLoading(true);
       const response = await fetch('http://localhost:8000/api/services/public/businesses', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      if (!response.ok) throw new Error('Failed to fetch businesses');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch businesses');
+      }
+      
       const data = await response.json();
-      setBusinesses(data);
+      // Ensure we're working with an array
+      setBusinesses(Array.isArray(data) ? data : []);
+      
     } catch (error) {
+      console.error('Error fetching businesses:', error);
       setError('Failed to load businesses');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e?.preventDefault(); // Handle both button click and form submit
+    
     if (!searchQuery.trim()) {
       fetchBusinesses();
       return;
@@ -43,20 +50,26 @@ const AllBusinessesList = ({ onClose }) => {
 
     try {
       setLoading(true);
+      setError('');
       const response = await fetch('http://localhost:8000/api/services/smart-service-search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ query: searchQuery })
+        body: JSON.stringify({ query: searchQuery.trim() })
       });
 
-      if (!response.ok) throw new Error('Search failed');
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+      
       const data = await response.json();
-      setBusinesses(data);
+      setBusinesses(data.matches || []); // Ensure we get the matches array
+      
     } catch (error) {
-      setError('Search failed');
+      console.error('Search error:', error);
+      setError('Search failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -64,16 +77,25 @@ const AllBusinessesList = ({ onClose }) => {
 
   const fetchAvailability = async (businessId) => {
     try {
+      setLoading(true);
       const response = await fetch(`http://localhost:8000/api/availability/business/${businessId}/availability`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      if (!response.ok) throw new Error('Failed to fetch availability');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch availability');
+      }
+      
       const data = await response.json();
       setAvailability(data.availability || []);
+      
     } catch (error) {
+      console.error('Availability error:', error);
       setError('Failed to load availability');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,7 +112,7 @@ const AllBusinessesList = ({ onClose }) => {
           <button className="close-button" onClick={onClose}>×</button>
         </div>
 
-        <div className="search-container">
+        <form onSubmit={handleSearch} className="search-container">
           <input
             type="text"
             placeholder="What service are you looking for? (e.g., 'I need a haircut')"
@@ -98,23 +120,25 @@ const AllBusinessesList = ({ onClose }) => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
           />
-          <button onClick={handleSearch} className="search-button">
+          <button type="submit" className="search-button">
             Search
           </button>
-        </div>
+        </form>
 
         {error && <div className="error-message">{error}</div>}
 
         {loading ? (
           <div className="loading">Loading businesses...</div>
-        ) : (
+        ) : businesses.length > 0 ? (
           <div className="businesses-grid">
             {businesses.map((business) => (
               <div key={business.id} className="business-card">
                 <div className="business-info">
-                  <h3>{business.business_name}</h3>
+                  <h3>{business.business_name || `${business.first_name}'s Business`}</h3>
                   <p className="owner-name">{business.first_name} {business.last_name}</p>
-                  <p className="services-count">{business.services?.length || 0} services available</p>
+                  <p className="services-count">
+                    {business.services?.length || 0} services available
+                  </p>
                 </div>
                 <button
                   className="action-button availability-button"
@@ -124,6 +148,10 @@ const AllBusinessesList = ({ onClose }) => {
                 </button>
               </div>
             ))}
+          </div>
+        ) : (
+          <div className="no-results">
+            {searchQuery.trim() ? 'No businesses found matching your search' : 'No businesses available'}
           </div>
         )}
       </div>
@@ -135,7 +163,7 @@ const AllBusinessesList = ({ onClose }) => {
               <button className="back-button" onClick={() => setSelectedBusiness(null)}>
                 ← Back to Businesses
               </button>
-              <h2>{selectedBusiness.business_name}'s Availability</h2>
+              <h2>{selectedBusiness.business_name || `${selectedBusiness.first_name}'s Business`}'s Availability</h2>
             </div>
 
             <div className="availability-content">
@@ -145,9 +173,9 @@ const AllBusinessesList = ({ onClose }) => {
                     <div key={index} className="availability-slot">
                       <h3 className="day-name">{slot.day_of_week}</h3>
                       <div className="time-range">
-                        <span>{slot.start_time.slice(0, 5)}</span>
+                        <span>{slot.start_time?.slice(0, 5)}</span>
                         <span> - </span>
-                        <span>{slot.end_time.slice(0, 5)}</span>
+                        <span>{slot.end_time?.slice(0, 5)}</span>
                       </div>
                     </div>
                   ))}

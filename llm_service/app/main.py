@@ -3,81 +3,99 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 import os
-from openai import OpenAI
 import json
+import requests
+from transformers import pipeline
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class SearchQuery(BaseModel):
     query: str
     businesses: List[dict]
 
 app = FastAPI()
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    base_url="https://api.openai.com/v1"
-)
 
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-SYSTEM_PROMPT = """You are a semantic service matcher analyzing user requests against available businesses and their services.
-Your task is to:
-1. Understand the user's intent and requirements
-2. Review each business and their services
-3. Return ONLY businesses that can truly fulfill the user's needs
-4. Return matches as a JSON object with IDs of matching businesses
+# Initialize Hugging Face API configuration
+HF_API_TOKEN = os.getenv("HUGGINGFACE_API_KEY")
+API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large"
+headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
 
-Example:
-User: "I need a haircut"
-Businesses:
-- Salon A (ID: 1) - Services: Haircut, Color, Style 
-- Store B (ID: 2) - Services: Retail, Clothes
-Match Response: {"matching_ids": [1]}
-
-Keep responses focused on exact service matches."""
+def query_huggingface(payload):
+    """Send request to Hugging Face API"""
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
 
 @app.post("/analyze-query")
-def analyze_query(query: SearchQuery):
+async def analyze_query(query: SearchQuery):
     try:
+        # Format businesses into a string
         businesses_info = "\n".join([
             f"Business: {b['business_name']} (ID: {b['id']})\n" +
             "Services: " + ", ".join([s['name'] for s in b['services']])
             for b in query.businesses
         ])
+
+        # Create the prompt
+        prompt = f"""
+        User Query: {query.query}
         
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"Request: {query.query}\n\nAvailable Businesses:\n{businesses_info}"}
-            ],
-            temperature=0.1,
-            max_tokens=150,
-            response_format={"type": "json_object"}
-        )
+        Available Businesses:
+        {businesses_info}
         
-        result = json.loads(response.choices[0].message.content)
+        Task: Analyze the user query and find matching businesses.
+        Return JSON format: {{"matching_ids": [business_ids]}}
+        """
+
+        # Query Hugging Face model
+        output = query_huggingface({
+            "inputs": prompt,
+            "parameters": {"max_length": 100, "temperature": 0.7}
+        })
+
+        # Process the response
+        try:
+            if isinstance(output, str):
+                result = json.loads(output)
+            elif isinstance(output, list) and len(output) > 0:
+                result = json.loads(output[0]['generated_text'])
+            else:
+                raise ValueError("Unexpected response format")
+        except json.JSONDecodeError:
+            # Fallback: Try to extract JSON from text
+            text_response = output[0]['generated_text'] if isinstance(output, list) else str(output)
+            import re
+            json_match = re.search(r'\{.*\}', text_response)
+            if json_match:
+                result = json.loads(json_match.group())
+            else:
+                raise ValueError("Could not parse JSON from response")
+
+        # Get matching businesses
+        matching_ids = result.get('matching_ids', [])
         matching_businesses = [
             business for business in query.businesses 
-            if business['id'] in result.get('matching_ids', [])
+            if business['id'] in matching_ids
         ]
-        
+
         return {
-            "keywords": result.get('keywords', []),
             "matches": matching_businesses
         }
-        
+
     except Exception as e:
         print(f"Error in analyze_query: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# Health check endpoint
 @app.get("/health")
-def health():
-    return {"status": "healthy"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+def health_check():
+    return {"status": "healthy", "model": "huggingface-bart-large"}

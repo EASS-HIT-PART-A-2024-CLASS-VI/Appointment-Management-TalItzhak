@@ -10,19 +10,24 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      llm_service:
+        condition: service_started
     environment:
       - DB_HOST=db
       - DB_NAME=appointmentdb 
       - DB_USER=appointment_user
       - DB_PASSWORD=appointment_password
       - SECRET_KEY=your_secret_key_here
-      - PYTHONUNBUFFERED=1
-      - PYTHONMALLOC=malloc
     volumes:
       - ./backend:/app
     command: sh -c "python create_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"
-    mem_limit: 3g
-    mem_reservation: 2g
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 1g
+    restart: always
     networks:
       - appointment_network
 
@@ -32,12 +37,17 @@ services:
     container_name: llm_service
     ports:
       - "8001:8001"
+    volumes:
+      - ./llm_service/app:/app/app  # Changed to only mount the app directory
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - PYTHONUNBUFFERED=1
-      - PYTHONMALLOC=malloc
-    mem_limit: 1g
-    mem_reservation: 512m
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+        reservations:
+          memory: 1g
+    restart: always
     networks:
       - appointment_network
 
@@ -54,14 +64,17 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    mem_limit: 1g
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     networks:
       - appointment_network
     healthcheck:
       test: mysqladmin ping -h localhost -u appointment_user -pappointment_password
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   frontend:
     build:
@@ -73,8 +86,13 @@ services:
       - ./frontend:/app
       - /app/node_modules
     command: npm start
-    mem_limit: 2g
-    mem_reservation: 1g
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 1g
+    restart: always
     networks:
       - appointment_network
     depends_on:
