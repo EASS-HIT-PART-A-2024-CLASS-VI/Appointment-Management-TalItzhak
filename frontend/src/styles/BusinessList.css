@@ -4,11 +4,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 85%;  /* Increased from 80% */
-  max-width: 1000px;  /* Increased from 900px */
-  height: 85vh;  /* Increased from 80vh */
-  background: linear-gradient(to bottom right, var(--bg-secondary), rgba(59, 130, 246, 0.05));
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  width: 85%;
+  max-width: 1000px;
+  height: 85vh;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
@@ -122,25 +122,22 @@
 }
 
 .business-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.5rem;
   transition: all 0.3s ease;
   animation: fadeIn 0.3s ease-out forwards;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .business-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .business-info h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 0.5rem;
+  color: var(--text-primary);
 }
 
 .business-info h3:hover {
@@ -148,9 +145,9 @@
 }
 
 .owner-name {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.875rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;  
 }
 
 .services-count {
@@ -445,4 +442,84 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+.action-button,
+.book-button,
+.availability-button {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.action-button:hover,
+.book-button:hover,
+.availability-button:hover {
+  background: var(--accent-secondary);
+}
+
+/* Update message banner styles */
+.message-banner.success {
+  background-color: rgba(22, 101, 52, 0.2);
+  color: #86efac;
+  border: 1px solid rgba(134, 239, 172, 0.2);
+}
+
+.message-banner.error {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(254, 202, 202, 0.2);
+}
+
+.dark-mode .businesses-grid::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.dark-mode .businesses-grid::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+}
+
+.dark-mode .businesses-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.action-button,
+.book-button,
+.availability-button {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.action-button:hover,
+.book-button:hover,
+.availability-button:hover {
+  background: var(--accent-secondary);
+}
+
+.services-count {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Light mode styles */
+.services-count {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.5rem;  /* Added top margin */
+}
+
+/* Dark mode styles */
+.dark-mode .services-count {
+  background: rgba(66, 135, 245, 0.15);  /* Softer blue background for dark mode */
+  color: #60a5fa;  /* Brighter blue text for better contrast in dark mode */
+}
+
+/* Optional hover effect */
+.dark-mode .services-count:hover {
+  background: rgba(66, 135, 245, 0.2);
 }
