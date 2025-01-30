@@ -20,10 +20,8 @@ const BusinessList = ({ onClose }) => {
     customer_phone: ''
   });
 
-  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split('T')[0];
   
-  // Generate time slots
   const timeSlots = Array.from({ length: 24 }, (_, hour) => 
     [`${hour.toString().padStart(2, '0')}:00`, `${hour.toString().padStart(2, '0')}:30`]
   ).flat();
@@ -294,6 +292,12 @@ const BusinessList = ({ onClose }) => {
             <button type="submit" className="submit-button">
               Create Appointment
             </button>
+
+            {message && (
+  <div className={`message-banner ${message.type}`}>
+    {message.content}
+  </div>
+)}
 
             {message.content && (
               <div className={`message-banner ${message.type}`}>

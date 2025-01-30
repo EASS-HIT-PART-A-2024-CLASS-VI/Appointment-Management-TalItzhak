@@ -4,10 +4,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
-  max-width: 1000px;
+  max-width: 1200px;
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   max-height: 90vh;
   overflow-y: auto;
@@ -16,126 +16,283 @@
 
 .stats-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  gap: 1.5rem;
   margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  position: relative;
 }
 
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.header-content h2 {
+.stats-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #1f2937;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.date-wrapper {
-  display: flex;
-  align-items: center;
-  background: #f3f4f6;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  position: relative;
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: #6b7280;
   transition: all 0.2s ease;
 }
 
-.date-wrapper:focus-within {
-  background: white;
-  box-shadow: 0 0 0 2px #3b82f6, 0 4px 12px rgba(59, 130, 246, 0.1);
+.close-button:hover {
+  color: #ef4444;
 }
 
-.calendar-icon {
+.date-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f3f4f6;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   color: #6b7280;
-  position: absolute;
-  left: 1rem;
 }
 
 .date-input {
   border: none;
   background: transparent;
-  color: #1f2937;
   font-size: 1rem;
-  padding: 0.5rem;
-  padding-left: 2.5rem;
+  color: #1f2937;
   cursor: pointer;
-  min-width: 150px;
-}
-
-.date-input::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  cursor: pointer;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  padding: 0.25rem;
 }
 
 .date-input:focus {
   outline: none;
 }
 
-.close-button {
-  background: #f3f4f6;
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+.stats-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.stats-date {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.summary-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #6b7280;
-  cursor: pointer;
+  gap: 1rem;
   transition: all 0.2s ease;
 }
 
-.close-button:hover {
-  background: #e5e7eb;
+.summary-card svg {
+  color: #3b82f6;
+}
+
+.card-content h3 {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.card-content p {
+  margin: 0.25rem 0 0 0;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: #1f2937;
 }
 
-/* Rest of your existing CSS styles... */
+.services-section {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 2rem;
+}
 
-/* Dark mode modifications */
+.services-section h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.service-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.appointment-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.service-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.detail-item span:first-child {
+  color: #6b7280;
+}
+
+.detail-item .amount {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Dark mode styles */
 .dark-mode {
   background: #1a1f2e;
+  color: #e5e7eb;
 }
 
-.dark-mode .date-wrapper {
+.dark-mode .stats-header h1 {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+}
+
+.dark-mode .date-picker {
   background: #2a3548;
-}
-
-.dark-mode .date-input {
-  color: white;
-}
-
-.dark-mode .calendar-icon {
   color: #9ca3af;
 }
 
+.dark-mode .date-input {
+  color: #e5e7eb;
+}
+
+.dark-mode .date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.dark-mode .summary-card {
+  background: #2a3548;
+}
+
+.dark-mode .card-content p {
+  color: #e5e7eb;
+}
+
+.dark-mode .services-section {
+  background: #2a3548;
+}
+
+.dark-mode .services-section h2 {
+  color: #e5e7eb;
+}
+
+.dark-mode .service-card {
+  background: #1e293b;
+}
+
+.dark-mode .service-header h3 {
+  color: #e5e7eb;
+}
+
+.dark-mode .appointment-count {
+  background: #374151;
+  color: #9ca3af;
+}
+
+.dark-mode .detail-item .amount {
+  color: #e5e7eb;
+}
+
+/* Loading and error states */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f4f6;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+  .daily-stats-container {
+    width: 95%;
+    padding: 1.5rem;
   }
-  
-  .date-wrapper {
-    width: 100%;
+
+  .summary-cards {
+    grid-template-columns: 1fr;
   }
-  
-  .date-input {
-    width: 100%;
+
+  .stats-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { Calendar } from 'lucide-react';
+import { Calendar, DollarSign, Users, Clock, X } from 'lucide-react';
 import '../styles/DailyStatsManager.css';
 
 const DailyStatsManager = ({ onClose }) => {
@@ -72,20 +72,19 @@ const DailyStatsManager = ({ onClose }) => {
   return (
     <div className={`daily-stats-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
       <div className="stats-header">
-        <div className="header-content">
-          <h2>Daily Statistics</h2>
-          <div className="date-wrapper">
-            <Calendar className="calendar-icon" size={20} />
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={handleDateChange}
-              className="date-input"
-              max={new Date().toISOString().split('T')[0]}
-            />
-          </div>
+        <button className="close-button" onClick={onClose}>
+          <X size={20} />
+        </button>
+        <h1>Daily Performance Analytics</h1>
+        <div className="date-picker">
+          <Calendar size={20} />
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={handleDateChange}
+            className="date-input"
+          />
         </div>
-        <button className="close-button" onClick={onClose}>×</button>
       </div>
 
       {loading ? (
@@ -103,25 +102,57 @@ const DailyStatsManager = ({ onClose }) => {
             {formatDateForDisplay(stats.date)}
           </div>
 
-          <div className="total-revenue-card">
-            <div className="card-label">Total Revenue</div>
-            <div className="revenue-amount">{formatCurrency(stats.total_revenue)}</div>
+          <div className="summary-cards">
+            <div className="summary-card revenue">
+              <DollarSign size={24} />
+              <div className="card-content">
+                <h3>Total Revenue</h3>
+                <p>{formatCurrency(stats.total_revenue)}</p>
+              </div>
+            </div>
+            
+            <div className="summary-card appointments">
+              <Users size={24} />
+              <div className="card-content">
+                <h3>Total Appointments</h3>
+                <p>{Object.values(stats.services).reduce((acc, curr) => acc + curr.count, 0)}</p>
+              </div>
+            </div>
+
+            <div className="summary-card average">
+              <Clock size={24} />
+              <div className="card-content">
+                <h3>Average Revenue/Service</h3>
+                <p>{formatCurrency(stats.total_revenue / 
+                  Object.values(stats.services).reduce((acc, curr) => acc + curr.count, 0))}</p>
+              </div>
+            </div>
           </div>
 
-          <div className="services-grid">
-            {Object.entries(stats.services).map(([serviceName, serviceData]) => (
-              <div key={serviceName} className="service-card">
-                <div className="service-header">
-                  <h3>{serviceName}</h3>
-                  <span className="appointment-count">
-                    {serviceData.count} appointment{serviceData.count !== 1 ? 's' : ''}
-                  </span>
+          <div className="services-section">
+            <h2>Services Breakdown</h2>
+            <div className="services-grid">
+              {Object.entries(stats.services).map(([serviceName, serviceData]) => (
+                <div key={serviceName} className="service-card">
+                  <div className="service-header">
+                    <h3>{serviceName}</h3>
+                    <span className="appointment-count">
+                      {serviceData.count} appointment{serviceData.count !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  <div className="service-details">
+                    <div className="detail-item">
+                      <span>Revenue</span>
+                      <span className="amount">{formatCurrency(serviceData.revenue)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span>Average</span>
+                      <span className="amount">{formatCurrency(serviceData.revenue / serviceData.count)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="service-revenue">
-                  {formatCurrency(serviceData.revenue)}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}

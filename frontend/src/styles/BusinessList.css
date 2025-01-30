@@ -523,3 +523,17 @@
 .dark-mode .services-count:hover {
   background: rgba(66, 135, 245, 0.2);
 }
+
+.message-banner {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.message-banner.error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
