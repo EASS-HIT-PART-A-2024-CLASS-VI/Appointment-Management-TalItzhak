@@ -20,6 +20,7 @@ from app.models import User
 from app.models import Service
 from sqlalchemy import or_
 import httpx
+import json 
 
 
 router = APIRouter()
@@ -240,7 +241,7 @@ def get_business_services(business_id: int, db: Session = Depends(get_db)):
 @router.post("/smart-service-search")
 async def smart_service_search(query: SearchQuery, db: Session = Depends(get_db)):
     """
-    Search for businesses and services based on query text
+    Search for businesses and services using LLM service
     """
     try:
         # Get all businesses with their services
@@ -248,12 +249,64 @@ async def smart_service_search(query: SearchQuery, db: Session = Depends(get_db)
             User.role == "business_owner"
         ).all()
         
-        # Perform search
-        matches = search_businesses(query.query, businesses)
+        # Convert businesses to dictionary format
+        businesses_data = [{
+            "id": business.id,
+            "business_name": business.business_name or f"{business.first_name} {business.last_name}",
+            "first_name": business.first_name,
+            "last_name": business.last_name,
+            "services": [{
+                "id": service.id,
+                "name": service.name,
+                "duration": service.duration,
+                "price": service.price
+            } for service in business.services]
+        } for business in businesses]
+
+        # Prepare the request to LLM service
+        llm_url = "http://llm_service:8001/analyze-query"
+        print(f"Connecting to LLM service at: {llm_url}")
         
-        return {"matches": matches}
-        
+        async with httpx.AsyncClient() as client:
+            try:
+                # Send request to LLM service
+                llm_response = await client.post(
+                    llm_url,
+                    json={
+                        "query": query.query,
+                        "businesses": businesses_data
+                    },
+                    timeout=30.0  # 30 seconds timeout
+                )
+                
+                # Check response status
+                if llm_response.status_code == 200:
+                    llm_data = llm_response.json()
+                    print(f"LLM service response: {llm_data}")
+                    
+                    # Return matches found by LLM service
+                    if "matches" in llm_data:
+                        return {
+                            "matches": llm_data["matches"]
+                        }
+                    else:
+                        return {"matches": []}
+                else:
+                    print(f"LLM service error: {llm_response.text}")
+                    raise HTTPException(
+                        status_code=llm_response.status_code,
+                        detail=f"LLM service error: {llm_response.text}"
+                    )
+                    
+            except httpx.RequestError as e:
+                print(f"Connection error to LLM service: {str(e)}")
+                raise HTTPException(
+                    status_code=503,
+                    detail=f"Error connecting to LLM service: {str(e)}"
+                )
+            
     except Exception as e:
+        print(f"Unexpected error in smart_service_search: {str(e)}")
         raise HTTPException(
             status_code=500,
             detail=f"Error performing search: {str(e)}"
