@@ -24,111 +24,74 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Hugging Face API configuration
-HF_API_TOKEN = os.getenv("HUGGINGFACE_API_KEY")
-API_URL = "https://api-inference.huggingface.co/models/gpt2" # Using GPT-2 for text completion
-headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
+def extract_keywords(query: str) -> List[str]:
+    """Extract meaningful keywords from the search query"""
+    # Common words to ignore
+    stop_words = {
+        'i', 'need', 'want', 'looking', 'for', 'a', 'the', 'to', 'in', 'on', 'at',
+        'who', 'what', 'where', 'when', 'how', 'can', 'could', 'would', 'should',
+        'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had',
+        'do', 'does', 'did', 'and', 'or', 'but', 'if', 'then', 'else', 'my', 'your',
+        'please', 'thanks', 'help', 'with', 'any', 'some', 'someone'
+    }
+    
+    # Split query into words and filter out stop words
+    words = query.lower().replace('?', '').replace('!', '').replace('.', '').split()
+    keywords = [word for word in words if word not in stop_words]
+    
+    return list(set(keywords))  # Remove duplicates
 
-def create_search_prompt(query: str, businesses: List[dict]) -> str:
-    """Create a prompt for the language model"""
-    prompt = f"Find businesses that offer services related to '{query}'. Here are the businesses and their services:\n\n"
+def calculate_relevance_score(business: dict, keywords: List[str]) -> float:
+    """Calculate how relevant a business is to the search keywords"""
+    score = 0
+    business_name = business['business_name'].lower()
     
-    for business in businesses:
-        prompt += f"Business: {business['business_name']}\n"
-        prompt += "Services:\n"
-        for service in business['services']:
-            prompt += f"- {service['name']} (${service['price']}, {service['duration']} minutes)\n"
-        prompt += "\n"
+    # Check business name
+    for keyword in keywords:
+        if keyword in business_name:
+            score += 2  # Business name matches are weighted more heavily
     
-    prompt += f"\nWhich businesses above offer services related to '{query}'? Return only the business IDs in a JSON format like this: {{\"matching_ids\": [id1, id2]}}."
-    return prompt
-
-def find_matching_businesses(query: str, businesses: List[dict]) -> List[int]:
-    """Find matching businesses based on the query"""
-    query_terms = query.lower().split()
-    matching_ids = []
+    # Check services
+    for service in business['services']:
+        service_name = service['name'].lower()
+        keyword_matches = sum(1 for keyword in keywords if keyword in service_name)
+        if keyword_matches > 0:
+            score += 3 * keyword_matches  # Service matches are weighted most heavily
     
-    for business in businesses:
-        # Check if query matches any service names
-        for service in business['services']:
-            service_name = service['name'].lower()
-            if any(term in service_name for term in query_terms):
-                matching_ids.append(business['id'])
-                break
-    
-    return matching_ids
+    return score
 
 @app.post("/analyze-query")
 async def analyze_query(query: SearchQuery):
     try:
-        print(f"Received query: {query.query}")  # Debug log
+        print(f"Received query: {query.query}")
         
-        # First, do a basic keyword match
-        matching_ids = find_matching_businesses(query.query, query.businesses)
+        # Extract meaningful keywords
+        keywords = extract_keywords(query.query)
+        print(f"Extracted keywords: {keywords}")
         
-        # If we found matches with basic search, return them
-        if matching_ids:
-            print(f"Found matches through basic search: {matching_ids}")  # Debug log
-            return {
-                "matches": [
-                    business for business in query.businesses 
-                    if business['id'] in matching_ids
-                ]
-            }
+        # Calculate relevance scores for each business
+        scored_businesses = []
+        for business in query.businesses:
+            score = calculate_relevance_score(business, keywords)
+            if score > 0:  # Only include businesses with positive relevance
+                scored_businesses.append((score, business))
         
-        # If no basic matches, use HuggingFace API for more advanced matching
-        prompt = create_search_prompt(query.query, query.businesses)
-        print(f"Sending prompt to HuggingFace: {prompt}")  # Debug log
+        # Sort by score and take top matches
+        scored_businesses.sort(reverse=True, key=lambda x: x[0])
         
-        response = requests.post(
-            API_URL,
-            headers=headers,
-            json={
-                "inputs": prompt,
-                "parameters": {
-                    "max_length": 100,
-                    "temperature": 0.7,
-                    "return_full_text": False
-                }
-            }
-        )
+        # Only return businesses with significant relevance
+        relevant_businesses = [business for score, business in scored_businesses if score >= 3]
         
-        print(f"HuggingFace response: {response.text}")  # Debug log
-        
-        if response.status_code != 200:
-            raise HTTPException(
-                status_code=response.status_code,
-                detail="Error from HuggingFace API"
-            )
-
-        # Try to extract JSON from the response
-        try:
-            result_text = response.json()[0]["generated_text"]
-            # Try to find a JSON object in the text
-            import re
-            json_match = re.search(r'\{.*\}', result_text)
-            if json_match:
-                result = json.loads(json_match.group())
-                matching_ids = result.get('matching_ids', [])
-            else:
-                matching_ids = []
-        except Exception as e:
-            print(f"Error parsing HuggingFace response: {str(e)}")  # Debug log
-            # Fallback to basic search if parsing fails
-            matching_ids = find_matching_businesses(query.query, query.businesses)
-
+        print(f"Found {len(relevant_businesses)} relevant businesses")
         return {
-            "matches": [
-                business for business in query.businesses 
-                if business['id'] in matching_ids
-            ]
+            "matches": relevant_businesses
         }
 
     except Exception as e:
-        print(f"Error in analyze_query: {str(e)}")  # Debug log
+        print(f"Error in analyze_query: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Health check endpoint
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "model": "gpt2"}
+    return {"status": "healthy", "model": "keyword-matching"}

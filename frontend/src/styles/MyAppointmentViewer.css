@@ -208,3 +208,39 @@ h2 {
     gap: 5px;
   }
 }
+
+.service-type, 
+.business-info, 
+.phone,
+.notes {
+  color: var(--text-secondary);
+  margin: 12px 0;  /* Increased from 8px to 12px */
+  font-size: 0.9rem;
+  padding: 4px 0;  /* Added padding */
+}
+
+/* Add specific margin for business info */
+.business-info {
+  margin-top: 16px;  /* Extra margin top for business info */
+}
+
+.appointment-details {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;  /* Adds consistent spacing between elements */
+}
+
+.appointment-details h4 {
+  margin: 0 0 16px 0;  /* Increased bottom margin */
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+/* Style for the info labels */
+.info-label {
+  color: var(--text-tertiary);
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
