@@ -100,9 +100,10 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 
 2. **Run the application:**
-  
+ ```yaml
 bash
-  docker-compose up --build
+docker-compose up --build
+
 
 
 3. Access the application:
