@@ -50,9 +50,8 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - Node.js 16+
 - MySQL 8.0+
 
-### 🐳 Docker Setup (Recommended)
-
-version: '3.8'
+Create a docker-compose.yml file in the root directory:
+yamlCopyversion: '3.8'
 
 services:
   backend:
@@ -101,7 +100,8 @@ services:
 
 volumes:
   mysql_data:
-   ```
+
+
 
 2. **Run the application:**
   ```bash
