@@ -44,12 +44,9 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Docker and Docker Compose
-- Python 3.12+
-- Node.js 16+
-- MySQL 8.0+
-
+### Docker Setup (Recommended)
+1. Create a `docker-compose.yml` file in the root directory:
+   ```yaml
 version: '3.8'
 
 services:
@@ -99,6 +96,7 @@ services:
 
 volumes:
   mysql_data:
+   ```
 
 
 
