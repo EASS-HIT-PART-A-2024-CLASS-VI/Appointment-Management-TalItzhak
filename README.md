@@ -2,7 +2,6 @@
 
 <img src="screenshots/logo.png" alt="logo" width="650"/>
 
-
 A full-stack appointment scheduling application built with FastAPI and React, featuring a dark/light theme and role-based access control.
 
 ## 🖼️ Screenshots
@@ -51,7 +50,8 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - Node.js 16+
 - MySQL 8.0+
 
-### Docker Setup (Recommended)
+### 🐳 Docker Setup (Recommended)
+
 1. Create a `docker-compose.yml` file in the root directory:
    ```yaml
    version: '3.8'
@@ -104,22 +104,23 @@ services:
 volumes:
   mysql_data:
    ```
+
 2. **Run the application:**
   ```bash
   docker-compose up --build
 
 
 3. Access the application:
-   - Frontend: `http://localhost:3000`
-   - Backend API: `http://localhost:8000`
-   - API Documentation: `http://localhost:8000/docs`
-   - LLM Service: http://localhost:8001'
+- 💻 Frontend: http://localhost:3000
+- 🔌 Backend API: http://localhost:8000
+- 📚 API Documentation: http://localhost:8000/docs
+- 📋 LLM Service: http://localhost:8001
+
+
 
 ### Manual Setup
 
-
-
-```
+'''
 ## 🏗️ Architecture
 
 ### Backend
