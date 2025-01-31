@@ -47,9 +47,9 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 ### Docker Setup (Recommended)
 1. Create a `docker-compose.yml` file in the root directory:
    ```yaml
-version: '3.8'
-
-services:
+   version: '3.8'
+   
+   services:
   backend:
     build: ./backend
     ports:
@@ -60,8 +60,8 @@ services:
     depends_on:
       - db
       - llm_service
-
-  frontend:
+   
+     frontend:
     build: ./frontend
     ports:
       - "3000:3000"
@@ -73,7 +73,7 @@ services:
     depends_on:
       - backend
 
-  llm_service:
+      llm_service:
     build: ./llm_service
     ports:
       - "8001:8001"
@@ -94,8 +94,6 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
-volumes:
-  mysql_data:
    ```
 
 
