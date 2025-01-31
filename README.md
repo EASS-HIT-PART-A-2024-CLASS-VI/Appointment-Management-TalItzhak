@@ -52,9 +52,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ### 🐳 Docker Setup (Recommended)
 
-1. Create a `docker-compose.yml` file in the root directory:
-   ```yaml
-   version: '3.8'
+version: '3.8'
 
 services:
   backend:
