@@ -45,60 +45,58 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 ## 🚀 Getting Started
 
 ### Docker Setup (Recommended)
-1. Create a docker-compose.yml file in the root directory:
-   
-yaml
-version: '3.8'
+1. Create a `docker-compose.yml` file in the root directory:
 
-services:
-  backend:
-    build: ./backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    depends_on:
-      - db
-      - llm_service
+   ```yaml
+   version: '3.8'
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      - REACT_APP_API_URL=http://localhost:8000
-    depends_on:
-      - backend
+   services:
+     backend:
+       build: ./backend
+       ports:
+         - "8000:8000"
+       volumes:
+         - ./backend:/app
+       command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+       depends_on:
+         - db
+         - llm_service
 
-  llm_service:
-    build: ./llm_service
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./llm_service:/app
-    environment:
-      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+     frontend:
+       build: ./frontend
+       ports:
+         - "3000:3000"
+       volumes:
+         - ./frontend:/app
+         - /app/node_modules
+       environment:
+         - REACT_APP_API_URL=http://localhost:8000
+       depends_on:
+         - backend
 
-  db:
-    image: mysql:8.0
-    environment:
-      - MYSQL_DATABASE=appointmentdb
-      - MYSQL_USER=appointment_user
-      - MYSQL_PASSWORD=appointment_password
-      - MYSQL_ROOT_PASSWORD=root_password
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
+     llm_service:
+       build: ./llm_service
+       ports:
+         - "8001:8001"
+       volumes:
+         - ./llm_service:/app
+       environment:
+         - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
 
-volumes:
-  mysql_data:
+     db:
+       image: mysql:8.0
+       environment:
+         - MYSQL_DATABASE=appointmentdb
+         - MYSQL_USER=appointment_user
+         - MYSQL_PASSWORD=appointment_password
+         - MYSQL_ROOT_PASSWORD=root_password
+       ports:
+         - "3307:3306"
+       volumes:
+         - mysql_data:/var/lib/mysql
 
-
+   volumes:
+     mysql_data:
 
 
 2. **Run the application:**
