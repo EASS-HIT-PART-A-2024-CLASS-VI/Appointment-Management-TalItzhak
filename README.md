@@ -110,9 +110,6 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - 📋 LLM Service: http://localhost:8001
 
 
-
-### Manual Setup
-
 '''
 ## 🏗️ Architecture
 
@@ -136,7 +133,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - **Smart Matching**: Business-service relevance scoring
 
 ## 📁 Project Structure
-
+'''
 ├── backend/
 │   ├── app/
 │   │   ├── routes/
@@ -154,13 +151,12 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 │   └── Dockerfile
 └── docker-compose.yml
 
+'''
 ## 📝 API Documentation
 
 After running the backend server, visit:
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
-
-
 
 
 ## 🌟 Contributing
