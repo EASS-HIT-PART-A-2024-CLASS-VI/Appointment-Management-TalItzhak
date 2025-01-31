@@ -9,12 +9,12 @@ from sqlalchemy import and_, text
 from typing import List
 import pandas as pd
 from io import BytesIO
-from fastapi.responses import Response
 from fastapi.responses import StreamingResponse
-
-
-
-
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Font, NamedStyle
+from openpyxl.utils import get_column_letter
+import io
+from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -250,3 +250,170 @@ async def get_business_appointments(
 
     return appointments
 
+def get_month_date_range():
+    today = datetime.now()
+    start_date = today.replace(day=1)
+    if today.month == 12:
+        end_date = today.replace(year=today.year + 1, month=1, day=1) - timedelta(days=1)
+    else:
+        end_date = today.replace(month=today.month + 1, day=1) - timedelta(days=1)
+    return start_date, end_date
+
+@router.get("/business/appointments/export")
+async def export_appointments_to_excel(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "business_owner":
+        raise HTTPException(status_code=403, detail="Only business owners can export appointments")
+
+    # Get appointments for the current month
+    start_date, end_date = get_month_date_range()
+    
+    appointments = (
+        db.query(
+            Appointment,
+            Service.name.label("service_name"),
+            Service.price.label("service_price"),
+            User.first_name.label("customer_first_name"),
+            User.last_name.label("customer_last_name"),
+            User.phone.label("customer_phone")
+        )
+        .join(Service, Appointment.title == Service.name)
+        .join(User, Appointment.customer_id == User.id)
+        .filter(Appointment.business_id == current_user.id)
+        .filter(Appointment.date >= start_date)
+        .filter(Appointment.date <= end_date)
+        .all()
+    )
+
+    # Create workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Appointments Report"
+
+    # Styles
+    header_style = NamedStyle(name="header_style")
+    header_style.fill = PatternFill("solid", fgColor="1F4E78")
+    header_style.font = Font(color="FFFFFF", bold=True, size=12)
+    header_style.alignment = Alignment(horizontal="center", vertical="center")
+    header_style.border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+
+    data_style = NamedStyle(name="data_style")
+    data_style.font = Font(size=11)
+    data_style.alignment = Alignment(horizontal="left", vertical="center")
+    data_style.border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+
+    # Add title
+    ws.merge_cells('A1:H1')
+    ws['A1'] = f"{current_user.business_name} - Monthly Appointments Report"
+    ws['A1'].font = Font(size=14, bold=True)
+    ws['A1'].alignment = Alignment(horizontal="center")
+
+    # Add date range
+    ws.merge_cells('A2:H2')
+    ws['A2'] = f"Report Period: {start_date.strftime('%B %d, %Y')} to {end_date.strftime('%B %d, %Y')}"
+    ws['A2'].font = Font(size=12)
+    ws['A2'].alignment = Alignment(horizontal="center")
+
+    # Headers
+    headers = [
+        "Date",
+        "Time",
+        "Service",
+        "Customer Name",
+        "Phone",
+        "Duration (min)",
+        "Revenue",
+        "Status"
+    ]
+
+    for col, header in enumerate(headers, start=1):
+        cell = ws.cell(row=4, column=col)
+        cell.value = header
+        cell.style = header_style
+
+    # Add data
+    total_revenue = 0
+    services_count = {}
+
+    for row_idx, (appt, service_name, service_price, first_name, last_name, phone) in enumerate(appointments, start=5):
+        # Track statistics
+        total_revenue += service_price
+        services_count[service_name] = services_count.get(service_name, 0) + 1
+
+        # Format data
+        date = appt.date.strftime("%Y-%m-%d")
+        time = appt.start_time.strftime("%H:%M")
+        customer_name = f"{first_name} {last_name}"
+        
+        # Add row data
+        row_data = [
+            date,
+            time,
+            service_name,
+            customer_name,
+            phone,
+            appt.duration,
+            f"${service_price:,.2f}",
+            "Completed" if appt.date < datetime.now().date() else "Scheduled"
+        ]
+
+        for col_idx, value in enumerate(row_data, start=1):
+            cell = ws.cell(row=row_idx, column=col_idx)
+            cell.value = value
+            cell.style = data_style
+
+    # Add summary section
+    summary_row = len(appointments) + 6
+    ws.merge_cells(f'A{summary_row}:H{summary_row}')
+    ws[f'A{summary_row}'] = "Summary"
+    ws[f'A{summary_row}'].font = Font(bold=True, size=12)
+    ws[f'A{summary_row}'].fill = PatternFill("solid", fgColor="E7EDF5")
+
+    # Summary data
+    average_revenue = total_revenue / len(appointments) if appointments else 0
+    most_popular_service = max(services_count.items(), key=lambda x: x[1])[0] if services_count else "N/A"
+
+    summary_data = [
+        ("Total Appointments", len(appointments)),
+        ("Total Revenue", f"${total_revenue:,.2f}"),
+        ("Average Revenue", f"${average_revenue:,.2f}"),
+        ("Most Popular Service", most_popular_service)
+    ]
+
+    for i, (label, value) in enumerate(summary_data):
+        row = summary_row + i + 1
+        ws[f'A{row}'] = label
+        ws[f'B{row}'] = value
+        ws[f'A{row}'].font = Font(bold=True)
+
+    # Adjust column widths
+    for col in range(1, 9):
+        ws.column_dimensions[get_column_letter(col)].width = 15
+
+    # Save to buffer
+    buffer = io.BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+
+    # Return the Excel file
+    headers = {
+        'Content-Disposition': 'attachment; filename=appointments_report.xlsx'
+    }
+    
+    return StreamingResponse(
+        buffer,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        headers=headers
+    )
