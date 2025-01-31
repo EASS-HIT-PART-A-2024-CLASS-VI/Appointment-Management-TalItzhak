@@ -134,6 +134,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ## 📁 Project Structure
 
+```
 ├── backend/
 │   ├── app/
 │   │   ├── routes/
@@ -150,6 +151,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 │   │   └── main.py
 │   └── Dockerfile
 └── docker-compose.yml
+```
 
 ## 📝 API Documentation
 
