@@ -45,11 +45,12 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 ## 🚀 Getting Started
 
 ### Docker Setup (Recommended)
-1. Create a `docker-compose.yml` file in the root directory:
-   ```yaml
-   version: '3.8'
+1. Create a docker-compose.yml file in the root directory:
    
-   services:
+yaml
+version: '3.8'
+
+services:
   backend:
     build: ./backend
     ports:
@@ -60,8 +61,8 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
     depends_on:
       - db
       - llm_service
-   
-     frontend:
+
+  frontend:
     build: ./frontend
     ports:
       - "3000:3000"
@@ -73,7 +74,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
     depends_on:
       - backend
 
-      llm_service:
+  llm_service:
     build: ./llm_service
     ports:
       - "8001:8001"
@@ -94,12 +95,15 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
     volumes:
       - mysql_data:/var/lib/mysql
 
-   ```
+volumes:
+  mysql_data:
+
 
 
 
 2. **Run the application:**
-  ```bash
+  
+bash
   docker-compose up --build
 
 
@@ -154,12 +158,11 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 │   └── Dockerfile
 └── docker-compose.yml
 
-```
 ## 📝 API Documentation
 
 After running the backend server, visit:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
 
 
@@ -167,9 +170,9 @@ After running the backend server, visit:
 ## 🌟 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch (git checkout -b feature/AmazingFeature)
+3. Commit your changes (git commit -m 'Add some AmazingFeature')
+4. Push to the branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
 
 
