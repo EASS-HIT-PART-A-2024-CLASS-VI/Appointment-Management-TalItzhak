@@ -2,7 +2,6 @@
 
 <img src="screenshots/logo.png" alt="logo" width="650"/>
 
-
 A full-stack appointment scheduling application built with FastAPI and React, featuring a dark/light theme and role-based access control.
 
 ## 🖼️ Screenshots
@@ -35,6 +34,8 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - 📋 Track appointment history
 
 ### General Features
+- 🧠 Natural language business search
+- 🎯 Intelligent service matching
 - 🌓 Dark/Light theme toggle
 - 🔐 JWT authentication
 - 👥 Role-based access control
@@ -45,9 +46,10 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ### Docker Setup (Recommended)
 1. Create a `docker-compose.yml` file in the root directory:
+
    ```yaml
    version: '3.8'
-   
+
    services:
      backend:
        build: ./backend
@@ -56,7 +58,10 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
        volumes:
          - ./backend:/app
        command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-   
+       depends_on:
+         - db
+         - llm_service
+
      frontend:
        build: ./frontend
        ports:
@@ -68,30 +73,44 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
          - REACT_APP_API_URL=http://localhost:8000
        depends_on:
          - backend
-   ```
 
-2. Run the application:
-   ```bash
-   docker-compose up --build
-   ```
+     llm_service:
+       build: ./llm_service
+       ports:
+         - "8001:8001"
+       volumes:
+         - ./llm_service:/app
+       environment:
+         - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+
+     db:
+       image: mysql:8.0
+       environment:
+         - MYSQL_DATABASE=appointmentdb
+         - MYSQL_USER=appointment_user
+         - MYSQL_PASSWORD=appointment_password
+         - MYSQL_ROOT_PASSWORD=root_password
+       ports:
+         - "3307:3306"
+       volumes:
+         - mysql_data:/var/lib/mysql
+
+   volumes:
+     mysql_data:
+
+
+2. **Run the application:**
+    ```yaml
+   bash docker-compose up --build
 
 3. Access the application:
-   - Frontend: `http://localhost:3000`
-   - Backend API: `http://localhost:8000`
-   - API Documentation: `http://localhost:8000/docs`
-
-### Manual Setup
-
-### Prerequisites
-- Docker and Docker Compose
-  OR
-- Python 3.9+
-- Node.js 16+
-- SQLite (included)
+- 💻 Frontend: http://localhost:3000
+- 🔌 Backend API: http://localhost:8000
+- 📚 API Documentation: http://localhost:8000/docs
+- 📋 LLM Service: http://localhost:8001
 
 
-```
-
+'''
 ## 🏗️ Architecture
 
 ### Backend
@@ -108,35 +127,45 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - **Axios**: HTTP client
 - **React Router**: Navigation
 
+### LLM
+- **FastAPI**: Dedicated microservice for intelligent search
+- **Natural Language Processing:**: Custom keyword extraction
+- **Smart Matching**: Business-service relevance scoring
+
 ## 📁 Project Structure
 
 ```
+├── backend/
+│   ├── app/
+│   │   ├── routes/
+│   │   ├── models.py
+│   │   └── schemas.py
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   └── context/
+│   └── Dockerfile
+├── llm_service/
+│   ├── app/
+│   │   └── main.py
+│   └── Dockerfile
+└── docker-compose.yml
+```
+
 ## 📝 API Documentation
 
 After running the backend server, visit:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
-## 🛠️ Testing
-
-### Backend Tests
-```bash
-cd backend
-pytest
-```
-
-### Frontend Tests
-```bash
-cd frontend
-npm test
-```
 
 ## 🌟 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch (git checkout -b feature/AmazingFeature)
+3. Commit your changes (git commit -m 'Add some AmazingFeature')
+4. Push to the branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
 
 
