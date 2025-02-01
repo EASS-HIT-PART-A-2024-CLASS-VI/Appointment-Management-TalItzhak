@@ -1,3 +1,4 @@
+/* DailyStatsManager.css */
 .daily-stats-container {
   position: fixed;
   top: 50%;
@@ -5,12 +6,12 @@
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 1000px;
-  background: white;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   max-height: 90vh;
   overflow-y: auto;
+  transition: all 0.3s ease;
 }
 
 .stats-header {
@@ -32,35 +33,24 @@
   margin: 0;
   font-size: 1.8rem;
   font-weight: 600;
-  color: #1f2937;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .date-selector {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: #f3f4f6;
   padding: 0.5rem 1rem;
   border-radius: 12px;
   transition: all 0.2s ease;
 }
 
-.date-selector:focus-within {
-  background: white;
-  box-shadow: 0 0 0 2px #3b82f6, 0 4px 12px rgba(59, 130, 246, 0.1);
-}
-
 .calendar-icon {
-  color: #6b7280;
+  cursor: pointer;
 }
 
 .date-input {
   border: none;
   background: transparent;
-  color: #1f2937;
   font-size: 1rem;
   padding: 0.5rem;
   cursor: pointer;
@@ -70,8 +60,11 @@
   outline: none;
 }
 
+.date-input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
 .close-button {
-  background: #f3f4f6;
   border: none;
   width: 36px;
   height: 36px;
@@ -80,14 +73,8 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color: #6b7280;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-.close-button:hover {
-  background: #e5e7eb;
-  color: #1f2937;
 }
 
 .stats-content {
@@ -98,14 +85,12 @@
 
 .stats-date {
   font-size: 1.4rem;
-  color: #4b5563;
   font-weight: 500;
   text-align: center;
   margin-bottom: 1rem;
 }
 
 .total-revenue-card {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
   padding: 2rem;
   border-radius: 16px;
   color: white;
@@ -131,17 +116,9 @@
 }
 
 .service-card {
-  background: white;
-  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 1.5rem;
   transition: all 0.2s ease;
-}
-
-.service-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-  border-color: #3b82f6;
 }
 
 .service-header {
@@ -154,13 +131,10 @@
 .service-header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #1f2937;
   font-weight: 600;
 }
 
 .appointment-count {
-  background: #eef2ff;
-  color: #4f46e5;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.875rem;
@@ -170,7 +144,6 @@
 .service-revenue {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
 }
 
 .loading-state {
@@ -179,14 +152,11 @@
   align-items: center;
   gap: 1rem;
   padding: 3rem;
-  color: #6b7280;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f4f6;
-  border-top: 4px solid #3b82f6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -196,22 +166,80 @@
   100% { transform: rotate(360deg); }
 }
 
-.error-message {
+/* Light Mode */
+.light-mode {
+  background: white;
+  color: #1f2937;
+}
+
+.light-mode .header-content h2 {
+  color: #1f2937;
+}
+
+.light-mode .date-selector {
+  background: #f3f4f6;
+}
+
+.light-mode .date-input {
+  color: #1f2937;
+}
+
+.light-mode .calendar-icon {
+  color: #6b7280;
+}
+
+.light-mode .close-button {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.light-mode .close-button:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.light-mode .stats-date {
+  color: #4b5563;
+}
+
+.light-mode .total-revenue-card {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.light-mode .service-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #1f2937;
+}
+
+.light-mode .service-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  border-color: #3b82f6;
+}
+
+.light-mode .appointment-count {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.light-mode .spinner {
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #3b82f6;
+}
+
+.light-mode .error-message {
   background: #fee2e2;
   color: #dc2626;
-  padding: 1rem;
-  border-radius: 12px;
-  text-align: center;
-  margin: 1rem 0;
 }
 
-/* Dark mode styles */
+/* Dark Mode */
 .dark-mode {
   background: #1a1f2e;
+  color: white;
 }
 
-.dark-mode .stats-header {
-  border-color: #374151;
+.dark-mode .header-content h2 {
+  color: white;
 }
 
 .dark-mode .date-selector {
@@ -220,6 +248,10 @@
 
 .dark-mode .date-input {
   color: white;
+}
+
+.dark-mode .calendar-icon {
+  color: #9ca3af;
 }
 
 .dark-mode .close-button {
@@ -232,24 +264,39 @@
   color: white;
 }
 
-.dark-mode .service-card {
-  background: #1e293b;
-  border-color: #374151;
-}
-
-.dark-mode .service-header h3 {
-  color: white;
-}
-
-.dark-mode .service-revenue {
-  color: white;
-}
-
 .dark-mode .stats-date {
   color: #9ca3af;
 }
 
-/* Responsive styles */
+.dark-mode .total-revenue-card {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+}
+
+.dark-mode .service-card {
+  background: #1e293b;
+  border: 1px solid #374151;
+}
+
+.dark-mode .service-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-color: #3b82f6;
+}
+
+.dark-mode .appointment-count {
+  background: rgba(255, 255, 255, 0.1);
+  color: #60a5fa;
+}
+
+.dark-mode .spinner {
+  border: 4px solid #2a3548;
+  border-top: 4px solid #60a5fa;
+}
+
+.dark-mode .error-message {
+  background: #7f1d1d;
+  color: #fecaca;
+}
+
 @media (max-width: 768px) {
   .daily-stats-container {
     width: 95%;
@@ -270,7 +317,3 @@
     font-size: 2rem;
   }
 }
-.date-input::-webkit-calendar-picker-indicator {
-  display: none;
-}
-

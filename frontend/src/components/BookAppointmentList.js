@@ -108,16 +108,17 @@ const BookAppointmentList = ({ onClose }) => {
   }
 };
 
- // Generate time slots
- const generateTimeSlots = () => {
-   const slots = [];
-   for (let hour = 8; hour < 20; hour++) {
-     for (let minute of ['00', '30']) {
-       slots.push(`${hour.toString().padStart(2, '0')}:${minute}`);
-     }
-   }
-   return slots;
- };
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let hour = 6; hour < 22; hour++) {
+    for (let minute = 0; minute < 60; minute += 10) {  
+      slots.push(
+        `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+      );
+    }
+  }
+  return slots;
+};
 
  const timeSlots = generateTimeSlots();
  const today = new Date().toISOString().split('T')[0];

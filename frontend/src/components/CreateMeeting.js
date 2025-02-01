@@ -23,7 +23,7 @@ const CreateMeeting = ({ business, onClose }) => {
   const generateTimeSlots = () => {
     const slots = [];
     for (let hour = 8; hour < 20; hour++) {
-      for (let minute of ['00', '30']) {
+      for (let minute of ['00', '10']) {
         slots.push(`${hour.toString().padStart(2, '0')}:${minute}`);
       }
     }
