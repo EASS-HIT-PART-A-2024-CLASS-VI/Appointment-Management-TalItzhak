@@ -86,10 +86,10 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
      db:
        image: mysql:8.0
        environment:
-         - MYSQL_DATABASE=appointmentdb
-         - MYSQL_USER=appointment_user
-         - MYSQL_PASSWORD=appointment_password
-         - MYSQL_ROOT_PASSWORD=root_password
+    - MYSQL_DATABASE=${MYSQL_DATABASE}
+    - MYSQL_USER=${MYSQL_USER}
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
        ports:
          - "3307:3306"
        volumes:
