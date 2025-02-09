@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Time, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Time, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship
 from app.database import Base
 from datetime import datetime, time
@@ -57,3 +57,24 @@ class Availability(Base):
     end_time = Column(Time, nullable=False)
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     owner = relationship("User", back_populates="availability")
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    recipient_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    title = Column(Enum(
+        "Rescheduling an Appointment",
+        "Canceling an Appointment", 
+        "Questions About Services",
+        "Payment and Billing Issues",
+        "Other Inquiries",
+        name="message_titles"
+    ), nullable=False)
+    content = Column(String(1000), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    read = Column(Boolean, default=False)
+    
+    sender = relationship("User", foreign_keys=[sender_id], backref="sent_messages")
+    recipient = relationship("User", foreign_keys=[recipient_id], backref="received_messages")

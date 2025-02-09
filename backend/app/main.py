@@ -5,6 +5,8 @@ from app.routes.shared import router as shared_router
 from app.routes.business_extras import router as business_router
 from app.routes.services import router as services_router
 from app.routes.availability import router as availability_router
+from app.routes.messages import router as messages_router
+
 
 app = FastAPI(
     title="Appointment Management API",
@@ -32,6 +34,7 @@ app.include_router(shared_router, prefix="/api/shared", tags=["Shared"])
 app.include_router(business_router, prefix="/api/business", tags=["Business"])
 app.include_router(services_router, prefix="/api/services", tags=["Services"])
 app.include_router(availability_router, prefix="/api/availability", tags=["Availability"])
+app.include_router(messages_router, prefix="/api/messages", tags=["Messages"])
 
 if __name__ == "__main__":
     import uvicorn

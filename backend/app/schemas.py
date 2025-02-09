@@ -1,6 +1,6 @@
 from datetime import datetime, time
 from typing import List, Optional
-from pydantic import BaseModel, ConfigDict, validator  # הוספנו את validator כאן
+from pydantic import BaseModel, ConfigDict, validator , Field
 from enum import Enum
 
 # Days of Week Enum
@@ -159,3 +159,27 @@ ServiceResponse.model_rebuild()
 
 class SearchQuery(BaseModel):
     query: str
+
+
+
+class MessageTitle(str, Enum):
+    RESCHEDULE = "Rescheduling an Appointment"
+    CANCEL = "Canceling an Appointment"
+    QUESTIONS = "Questions About Services"
+    PAYMENT = "Payment and Billing Issues"
+    OTHER = "Other Inquiries"
+
+class MessageCreate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    title: MessageTitle
+    content: str = Field(..., min_length=1, max_length=1000)
+
+class MessageResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    title: str
+    content: str
+    created_at: datetime
+    read: bool
+    sender_name: str 
+    recipient_name: str
