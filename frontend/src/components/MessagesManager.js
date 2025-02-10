@@ -76,20 +76,21 @@ const MessagesManager = ({ onClose }) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
+    date.setHours(date.getHours() + 2); 
+    
     const now = new Date();
     const isToday = date.toDateString() === now.toDateString();
     
-    const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
-    const time = date.toLocaleTimeString('en-US', timeOptions);
-
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}`;
+  
     if (isToday) {
-      return `Today at ${time}`;
+      return `Today at ${timeString}`;
     }
     
-    return `${date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
-    })} at ${time}`;
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${monthNames[date.getMonth()]} ${date.getDate()} at ${timeString}`;
   };
 
   const handleMessageClick = (messageId) => {

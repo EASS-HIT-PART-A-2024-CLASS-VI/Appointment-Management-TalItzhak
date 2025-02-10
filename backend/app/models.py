@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Time, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 from app.database import Base
 from datetime import datetime, time
+import pytz
 
 class User(Base):
     __tablename__ = "users"
@@ -58,6 +59,13 @@ class Availability(Base):
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     owner = relationship("User", back_populates="availability")
 
+
+def get_israel_time():
+    utc_time = datetime.utcnow()
+    israel_tz = pytz.timezone('Asia/Jerusalem')
+    return utc_time.replace(tzinfo=pytz.UTC).astimezone(israel_tz)
+
+
 class Message(Base):
     __tablename__ = "messages"
 
@@ -73,7 +81,7 @@ class Message(Base):
         name="message_titles"
     ), nullable=False)
     content = Column(String(1000), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=get_israel_time)
     read = Column(Boolean, default=False)
     
     sender = relationship("User", foreign_keys=[sender_id], backref="sent_messages")

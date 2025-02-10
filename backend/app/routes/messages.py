@@ -6,6 +6,8 @@ from app.schemas import MessageCreate, MessageResponse
 from datetime import datetime
 from typing import List
 from sqlalchemy import desc
+import pytz
+
 
 router = APIRouter()
 
@@ -43,14 +45,17 @@ async def send_message_to_business(
         
         print(f"Recipient found: {recipient.first_name} {recipient.last_name}")
         
-        # Create new message
+        # Create new message with Israel timezone
+        israel_tz = pytz.timezone('Asia/Jerusalem')
+        current_time = datetime.now() 
+        
         print(f"Creating message with title: {message.title}")
         db_message = Message(
             sender_id=sender.id,
             recipient_id=recipient.id,
-            title=message.title.value,  # Use .value for enum
+            title=message.title.value,
             content=message.content,
-            created_at=datetime.utcnow(),
+            created_at=current_time,
             read=False
         )
         
