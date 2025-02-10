@@ -7,7 +7,8 @@ import AppointmentsManager from './AppointmentsManager';
 import ServicesManager from './ServicesManager';
 import ClientSearchManager from './ClientSearchManager';
 import DailyStatsManager from './DailyStatsManager';
-import { Calendar, Briefcase, Search, Clock, BarChart2, FileDown, LogOut } from 'lucide-react';
+import MessagesManager from './MessagesManager';
+import { Calendar, Briefcase, Search, Clock, BarChart2, FileDown, LogOut, MessageCircle } from 'lucide-react';
 import '../styles/BusinessDashboard.css';
 
 const BusinessDashboard = () => {
@@ -18,27 +19,48 @@ const BusinessDashboard = () => {
   const [exportLoading, setExportLoading] = useState(false);
   const [exportError, setExportError] = useState('');
   const [exportSuccess, setExportSuccess] = useState('');
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
-    const fetchBusinessInfo = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/shared/me', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setBusinessInfo(data);
-        }
-      } catch (error) {
-        console.error('Error fetching business info:', error);
-      }
-    };
-
     fetchBusinessInfo();
+    fetchUnreadMessages();
+    const messageInterval = setInterval(fetchUnreadMessages, 30000);
+    return () => clearInterval(messageInterval);
   }, []);
+
+  const fetchBusinessInfo = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/shared/me', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBusinessInfo(data);
+      }
+    } catch (error) {
+      console.error('Error fetching business info:', error);
+    }
+  };
+
+  const fetchUnreadMessages = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/messages/unread-count', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUnreadMessages(data.unread_count);
+      }
+    } catch (error) {
+      console.error('Error fetching unread messages:', error);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -85,7 +107,6 @@ const BusinessDashboard = () => {
 
   return (
     <div className={`app-container ${!isDark ? 'light-mode' : ''}`}>
-      {/* Sidebar */}
       <div className="sidebar">
         <div className="brand">
           {businessInfo ? (
@@ -131,6 +152,19 @@ const BusinessDashboard = () => {
           </button>
 
           <button 
+            className={`nav-item ${activeView === 'messages' ? 'active' : ''}`}
+            onClick={() => setActiveView('messages')}
+          >
+            <MessageCircle className="nav-icon" />
+            <span>
+              Messages
+              {unreadMessages > 0 && (
+                <span className="message-badge">{unreadMessages}</span>
+              )}
+            </span>
+          </button>
+
+          <button 
             className={`nav-item ${activeView === 'stats' ? 'active' : ''}`}
             onClick={() => setActiveView('stats')}
           >
@@ -154,7 +188,6 @@ const BusinessDashboard = () => {
         </nav>
       </div>
 
-      {/* Main Content */}
       <div className="main-content">
         {exportError && <div className="error-message">{exportError}</div>}
         {exportSuccess && <div className="success-message">{exportSuccess}</div>}
@@ -163,6 +196,7 @@ const BusinessDashboard = () => {
         {activeView === 'clients' && <ClientSearchManager onClose={() => setActiveView('dashboard')} />}
         {activeView === 'availability' && <AvailabilityManager onClose={() => setActiveView('dashboard')} />}
         {activeView === 'stats' && <DailyStatsManager onClose={() => setActiveView('dashboard')} />}
+        {activeView === 'messages' && <MessagesManager onClose={() => setActiveView('dashboard')} />}
       </div>
     </div>
   );
