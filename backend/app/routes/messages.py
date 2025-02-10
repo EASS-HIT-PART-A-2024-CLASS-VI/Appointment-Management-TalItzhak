@@ -166,3 +166,30 @@ async def get_unread_messages_count(
     ).count()
     
     return {"unread_count": count}
+
+
+
+@router.delete("/messages/{message_id}")
+async def delete_message(
+    message_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(business_owner_required)
+):
+    """Delete a message (business owners only)"""
+    user = db.query(User).filter(User.username == current_user["sub"]).first()
+    
+    message = db.query(Message).filter(
+        Message.id == message_id,
+        Message.recipient_id == user.id
+    ).first()
+    
+    if not message:
+        raise HTTPException(
+            status_code=404,
+            detail="Message not found or you don't have permission to delete it"
+        )
+    
+    db.delete(message)
+    db.commit()
+    
+    return {"message": "Message deleted successfully"}

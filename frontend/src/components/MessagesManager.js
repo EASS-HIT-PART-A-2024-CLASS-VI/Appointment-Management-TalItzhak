@@ -1,17 +1,18 @@
-// src/components/MessagesManager.js
 import React, { useState, useEffect } from 'react';
-import { Check, Mail } from 'lucide-react';
+import { Check, Trash2 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 import '../styles/MessagesManager.css';
 
 const MessagesManager = ({ onClose }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [expandedMessage, setExpandedMessage] = useState(null);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 30000); // Refresh every 30 seconds
+    const interval = setInterval(fetchMessages, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -26,18 +27,6 @@ const MessagesManager = ({ onClose }) => {
       if (!response.ok) throw new Error('Failed to fetch messages');
       const data = await response.json();
       setMessages(data);
-
-      // Fetch unread count
-      const unreadResponse = await fetch('http://localhost:8000/api/messages/unread-count', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      
-      if (unreadResponse.ok) {
-        const unreadData = await unreadResponse.json();
-        setUnreadCount(unreadData.unread_count);
-      }
     } catch (error) {
       setError('Failed to load messages');
     } finally {
@@ -45,7 +34,8 @@ const MessagesManager = ({ onClose }) => {
     }
   };
 
-  const markAsRead = async (messageId) => {
+  const markAsRead = async (messageId, e) => {
+    e.stopPropagation();
     try {
       const response = await fetch(`http://localhost:8000/api/messages/messages/${messageId}/read`, {
         method: 'PATCH',
@@ -59,28 +49,65 @@ const MessagesManager = ({ onClose }) => {
       setMessages(messages.map(msg => 
         msg.id === messageId ? { ...msg, read: true } : msg
       ));
-      setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
       setError('Failed to mark message as read');
     }
   };
 
+  const deleteMessage = async (messageId, e) => {
+    e.stopPropagation();
+    if (!window.confirm('Are you sure you want to delete this message?')) return;
+    
+    try {
+      const response = await fetch(`http://localhost:8000/api/messages/messages/${messageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to delete message');
+
+      setMessages(messages.filter(msg => msg.id !== messageId));
+    } catch (error) {
+      setError('Failed to delete message');
+    }
+  };
+
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const date = new Date(dateString);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    
+    const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+    const time = date.toLocaleTimeString('en-US', timeOptions);
+
+    if (isToday) {
+      return `Today at ${time}`;
+    }
+    
+    return `${date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric' 
+    })} at ${time}`;
+  };
+
+  const handleMessageClick = (messageId) => {
+    setExpandedMessage(expandedMessage === messageId ? null : messageId);
+  };
+
+  const getUnreadCount = () => {
+    return messages.filter(msg => !msg.read).length;
   };
 
   return (
-    <div className="messages-manager">
+    <div className={`messages-manager ${isDark ? 'dark' : ''}`}>
       <div className="messages-header">
         <h2>
           Messages 
-          {unreadCount > 0 && <span className="unread-badge">{unreadCount}</span>}
+          {getUnreadCount() > 0 && (
+            <span className="unread-count">{getUnreadCount()}</span>
+          )}
         </h2>
         <button className="close-button" onClick={onClose}>×</button>
       </div>
@@ -90,33 +117,46 @@ const MessagesManager = ({ onClose }) => {
       {loading ? (
         <div className="loading">Loading messages...</div>
       ) : messages.length === 0 ? (
-        <div className="no-messages">
-          <Mail size={48} />
-          <p>No messages yet</p>
-        </div>
+        <div className="no-messages">No messages yet</div>
       ) : (
         <div className="messages-list">
           {messages.map(message => (
-            <div key={message.id} className={`message-card ${!message.read ? 'unread' : ''}`}>
+            <div 
+              key={message.id} 
+              className={`message-card ${!message.read ? 'unread' : ''}`}
+              onClick={() => handleMessageClick(message.id)}
+            >
               <div className="message-header">
                 <div className="message-info">
                   <h3>{message.title}</h3>
-                  <p className="sender">From: {message.sender_name}</p>
-                  <p className="timestamp">{formatDate(message.created_at)}</p>
+                  <span className="sender">From: {message.sender_name}</span>
+                  <span className="date">{formatDate(message.created_at)}</span>
                 </div>
-                {!message.read && (
+                <div className="message-actions">
+                  {!message.read && (
+                    <button 
+                      className="mark-read-button"
+                      onClick={(e) => markAsRead(message.id, e)}
+                    >
+                      <Check size={16} />
+                      Mark as read
+                    </button>
+                  )}
                   <button 
-                    className="mark-read-button"
-                    onClick={() => markAsRead(message.id)}
+                    className="delete-button"
+                    onClick={(e) => deleteMessage(message.id, e)}
+                    title="Delete message"
                   >
-                    <Check size={16} />
-                    Mark as Read
+                    <Trash2 size={16} />
+                    Delete
                   </button>
-                )}
+                </div>
               </div>
-              <div className="message-content">
-                <p>{message.content}</p>
-              </div>
+              {expandedMessage === message.id && (
+                <div className="message-content">
+                  <p>{message.content}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
