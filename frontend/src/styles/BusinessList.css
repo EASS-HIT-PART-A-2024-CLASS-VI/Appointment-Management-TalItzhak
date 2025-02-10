@@ -537,3 +537,89 @@
   color: #dc2626;
   border: 1px solid #fecaca;
 }
+
+/* Add these new styles to your existing BusinessList.css */
+
+.owner-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.owner-name {
+  margin: 0;  /* Remove default margin since it's now in a flex container */
+}
+
+
+
+
+.message-form-section {
+  transform: translateX(100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--bg-secondary);
+  min-width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.show-message .message-form-section {
+  transform: translateX(0);
+}
+
+.show-message .businesses-section {
+  transform: translateX(-100%);
+}
+
+.message-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  background: transparent;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.message-button:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+.message-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.character-count {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+/* Update existing message banner styles */
+.message-banner {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.message-banner.error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.message-banner.success {
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #86efac;
+}

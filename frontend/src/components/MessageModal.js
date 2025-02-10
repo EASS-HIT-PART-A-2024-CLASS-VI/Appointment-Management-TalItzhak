@@ -1,14 +1,13 @@
-// src/components/MessageModal.js
 import React, { useState } from 'react';
-import { useTheme } from '../context/ThemeContext';
+import { MessageCircle } from 'lucide-react';
 import '../styles/MessageModal.css';
 
-const MessageModal = ({ business, onClose }) => {
-  const { isDark } = useTheme();
+const MessageModal = ({ businessId, businessName, onClose }) => {
   const [messageData, setMessageData] = useState({
     title: '',
     content: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -22,11 +21,12 @@ const MessageModal = ({ business, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setError('');
     setSuccess('');
 
     try {
-      const response = await fetch(`http://localhost:8000/api/messages/send/${business.id}`, {
+      const response = await fetch(`http://localhost:8000/api/messages/send/${businessId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,38 +36,41 @@ const MessageModal = ({ business, onClose }) => {
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.detail || 'Failed to send message');
+        throw new Error('Failed to send message');
       }
 
       setSuccess('Message sent successfully!');
+      setMessageData({ title: '', content: '' });
       setTimeout(() => {
         onClose();
-      }, 1500);
-    } catch (error) {
-      setError(error.message);
+      }, 2000);
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className={`modal-overlay ${!isDark ? 'light-mode' : ''}`}>
-      <div className="modal-content">
-        <div className="modal-header">
-          <h3>Send Message to {business.business_name}</h3>
-          <button className="close-button" onClick={onClose}>×</button>
+    <div className="business-list-container">
+      <div className="content-section">
+        <div className="header">
+          <button className="back-button" onClick={onClose}>
+            ← Back to Businesses
+          </button>
+          <h2>Message to {businessName}</h2>
         </div>
 
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+        <form onSubmit={handleSubmit} className="appointment-form">
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
 
-        <form onSubmit={handleSubmit} className="message-form">
           <div className="form-group">
             <label>Message Type</label>
             <select
               value={messageData.title}
-              onChange={(e) => setMessageData({ ...messageData, title: e.target.value })}
+              onChange={(e) => setMessageData({...messageData, title: e.target.value})}
               required
-              className="form-input"
             >
               <option value="">Select a message type</option>
               {messageTypes.map(type => (
@@ -80,16 +83,22 @@ const MessageModal = ({ business, onClose }) => {
             <label>Message</label>
             <textarea
               value={messageData.content}
-              onChange={(e) => setMessageData({ ...messageData, content: e.target.value })}
-              required
-              className="form-input message-textarea"
+              onChange={(e) => setMessageData({...messageData, content: e.target.value})}
               placeholder="Write your message here..."
-              rows={5}
+              required
+              maxLength={1000}
             />
+            <span className="character-count">
+              {messageData.content.length}/1000 characters
+            </span>
           </div>
 
-          <button type="submit" className="submit-button">
-            Send Message
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Sending...' : 'Send Message'}
           </button>
         </form>
       </div>
