@@ -26,7 +26,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - 📊 View daily statistics and revenue
 - 📋 Export appointments to Excel
 - 🔍 Search client appointments by phone number
--📩 Receive and manage messages from customers
+- 📩 Receive and manage messages from customers
 
 
 ### For Customers
