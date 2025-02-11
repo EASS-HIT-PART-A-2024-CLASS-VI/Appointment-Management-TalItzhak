@@ -26,12 +26,15 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - 📊 View daily statistics and revenue
 - 📋 Export appointments to Excel
 - 🔍 Search client appointments by phone number
+ -📩 Receive and manage messages from customers
+
 
 ### For Customers
 - 👥 Browse available businesses
 - 📅 Book appointments
 - ⏰ View business availability
 - 📋 Track appointment history
+- ✉️ Send messages to business owners
 
 ### General Features
 - 🧠 Natural language business search
@@ -41,6 +44,8 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 - 👥 Role-based access control
 - 📱 Responsive design
 - ⚡ Real-time validation
+
+  
 
 ## 🚀 Getting Started
 
