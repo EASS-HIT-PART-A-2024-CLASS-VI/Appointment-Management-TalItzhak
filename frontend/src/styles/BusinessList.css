@@ -208,59 +208,105 @@
 .action-button,
 .book-button,
 .availability-button {
+  background: #3b82f6;
+  color: white;
   width: 100%;
   padding: 0.75rem;
-  border-radius: 8px;
+  border: none;
+  border-radius: 0.5rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease;
   margin-top: 0.5rem;
-  text-align: center;
-  font-size: 0.95rem;
-  background: #4287f5;  /* Match the blue from your design */
-  color: white;
-  border: none;
-  box-shadow: 0 2px 4px rgba(66, 135, 245, 0.2);
+  opacity: 1;
+  position: relative;
+  z-index: 1;
+  visibility: visible;
 }
 
 .action-button:hover,
 .book-button:hover,
 .availability-button:hover {
   background: #2563eb;
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(66, 135, 245, 0.3);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
 }
 
-.book-button {
-  background: linear-gradient(135deg, var(--accent-primary), #60a5fa);
-  color: white;
-  border: none;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-  transition: all 0.3s ease;
+/* Additional button states to ensure visibility */
+.action-button:active,
+.book-button:active,
+.availability-button:active {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
 }
 
-.book-button:hover {
-  background: linear-gradient(135deg, #60a5fa, var(--accent-primary));
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+/* Ensure button stays visible in all states */
+.action-button:focus,
+.book-button:focus,
+.availability-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
 }
 
-.submit-button {
-  background: var(--accent-primary);
-  color: white;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 1rem;
+.appointment-form .submit-button,
+.light-mode .appointment-form .submit-button {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  margin-top: 1rem !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  visibility: visible !important;
+  width: 100% !important;
+  display: block !important;
 }
 
-.submit-button:hover {
-  background: var(--accent-secondary);
-  transform: translateY(-1px);
+.appointment-form .submit-button:hover,
+.light-mode .appointment-form .submit-button:hover {
+  background-color: #2563eb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Override any possible overlapping styles */
+.business-list-container .submit-button,
+.content-section .submit-button,
+.form-section .submit-button {
+  background-color: #3b82f6 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.business-list-container .submit-button:hover,
+.content-section .submit-button:hover,
+.form-section .submit-button:hover {
+  background-color: #2563eb !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Additional specificity for light mode */
+html body .light-mode .submit-button,
+html body .light-mode .submit-button:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .error-message {
@@ -622,4 +668,49 @@
   background-color: #dcfce7;
   color: #16a34a;
   border: 1px solid #86efac;
+}
+
+.action-button,
+.book-button,
+.availability-button {
+  background: #3b82f6;
+  color: white;
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0.5rem;
+  opacity: 1 !important;
+}
+
+/* Light mode specific styles */
+.light-mode .action-button,
+.light-mode .book-button,
+.light-mode .availability-button {
+  background: #3b82f6 !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.light-mode .action-button:hover,
+.light-mode .book-button:hover,
+.light-mode .availability-button:hover {
+  background: #2563eb !important;
+  opacity: 1 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+/* Ensure visibility in all states for light mode */
+.light-mode .action-button:active,
+.light-mode .book-button:active,
+.light-mode .availability-button:active,
+.light-mode .action-button:focus,
+.light-mode .book-button:focus,
+.light-mode .availability-button:focus {
+  opacity: 1 !important;
+  background: #2563eb !important;
 }

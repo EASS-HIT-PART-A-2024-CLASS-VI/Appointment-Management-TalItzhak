@@ -103,21 +103,54 @@ select.form-input {
 }
 
 .submit-button {
-  background: var(--accent-primary);
-  color: white;
-  border: none;
-  padding: 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 1rem;
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  margin-top: 1rem !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  visibility: visible !important;
+  width: 100% !important;
 }
 
 .submit-button:hover {
-  background: var(--accent-secondary);
-  transform: translateY(-1px);
+  background-color: #2563eb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.light-mode .submit-button {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border: none !important;
+}
+
+.light-mode .submit-button:hover {
+  background-color: #2563eb !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force button visibility in all states */
+.submit-button:active,
+.submit-button:focus,
+.light-mode .submit-button:active,
+.light-mode .submit-button:focus {
+  background-color: #2563eb !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  outline: none !important;
 }
 
 .alert {
@@ -154,3 +187,4 @@ select.form-input {
     font-size: 1.25rem;
   }
 }
+

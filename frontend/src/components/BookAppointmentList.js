@@ -188,8 +188,10 @@ const BookAppointmentList = ({ onClose }) => {
               <div key={business.id} className="business-card">
                 <div className="business-info">
                   <h3>{business.business_name}</h3>
-                  <div className="owner-info">
+                  <div className="owner-name-row">
                     <p className="owner-name">{business.first_name} {business.last_name}</p>
+                  </div>
+                  <div className="message-button-container">
                     <button 
                       className="message-button"
                       onClick={() => {

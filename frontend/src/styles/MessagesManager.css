@@ -177,10 +177,12 @@
   gap: 0.75rem;
 }
 
+/* Updated button styles for equal sizes */
 .messages-manager .mark-read-button,
 .messages-manager .delete-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -188,6 +190,8 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-width: 120px; /* Fixed width for both buttons */
+  height: 36px; /* Fixed height for both buttons */
 }
 
 .messages-manager .mark-read-button {
@@ -217,7 +221,6 @@
   background: white;
   border: 1px solid #ef4444;
   color: #ef4444;
-  min-width: 100px;
   justify-content: center;
 }
 
@@ -235,102 +238,4 @@
 
 .dark .messages-manager .delete-button:hover {
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
-}
-
-.message-content {
-  padding: 0 1.25rem 1.25rem;
-  color: #374151;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  border-top: 1px solid #e5e7eb;
-  background: white;
-  animation: slideDown 0.2s ease-out;
-}
-
-.dark .message-content {
-  color: #d1d5db;
-  border-top-color: #3d3d3d;
-  background: #2d2d2d;
-}
-
-.message-content p {
-  margin: 1rem 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.loading,
-.no-messages {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.dark .loading,
-.dark .no-messages {
-  color: #9ca3af;
-}
-
-.error-message {
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dark .error-message {
-  background: rgba(220, 38, 38, 0.2);
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .messages-manager {
-    width: 95%;
-    height: 90vh;
-    padding: 1rem;
-  }
-
-  .messages-manager .message-actions {
-    flex-direction: row;
-  }
-
-  .messages-manager .delete-button {
-    padding: 0.5rem 1rem;
-  }
-}
-
-/* Custom scrollbar */
-.messages-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.messages-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.messages-list::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
-  border-radius: 3px;
-}
-
-.messages-list::-webkit-scrollbar-thumb:hover {
-  background: #d1d5db;
 }

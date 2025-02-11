@@ -144,21 +144,39 @@ h3 {
   box-shadow: 0 0 0 2px var(--accent-hover);
 }
 
-.submit-button {
+/* Base submit button styles */
+.services-manager .submit-button {
   width: 100%;
   padding: 12px;
-  background: var(--accent-primary);
+  background-color: #3b82f6;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease;
+  opacity: 1;
 }
 
-.submit-button:hover {
-  background: var(--accent-secondary);
+/* Light mode specific styles */
+.light-mode .services-manager .submit-button {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.light-mode .services-manager .submit-button:hover {
+  background-color: #2563eb !important;
+  opacity: 1 !important;
   transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+/* Additional states for light mode */
+.light-mode .services-manager .submit-button:active,
+.light-mode .services-manager .submit-button:focus {
+  background-color: #2563eb !important;
+  opacity: 1 !important;
 }
 
 .no-services {
