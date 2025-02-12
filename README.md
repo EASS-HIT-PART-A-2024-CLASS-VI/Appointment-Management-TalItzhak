@@ -61,7 +61,7 @@ Generate an API key from your account settings
 Create a .env file in the llm_service directory and add your API key:
 
    ```yaml
-HUGGINGFACE_API_KEY=your_api_key_here
+   HUGGINGFACE_API_KEY=your_api_key_here
 
 
 ### Docker Setup (Recommended)
