@@ -18,6 +18,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ## Customer Features
 <img src="screenshots/Create_Meeting.png" alt="Create Meeting" width="650"/>
+<img src="screenshots/business_client.png" alt="business_client" width="650"/>
 
 
 ## ✨ Features
