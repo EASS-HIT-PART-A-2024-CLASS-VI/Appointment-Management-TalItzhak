@@ -26,7 +26,6 @@ def create_appointment(
     print(f"Requested date: {appointment.date}")
     print(f"Requested time: {appointment.start_time}")
 
-    # Get the service details
     service = db.query(Service).filter(
         Service.name == appointment.title,
         Service.owner_id == business_id
@@ -45,7 +44,6 @@ def create_appointment(
             }
         )
 
-    # Format appointment time for checking
     appointment_time = appointment.start_time.strftime("%H:%M")
     appointment_date = appointment.date.strftime("%Y-%m-%d")
     service_end_time = (datetime.combine(appointment.date.date(), appointment.start_time) 
@@ -139,7 +137,7 @@ def create_appointment(
         )
     
 
-@router.put("/appointments/{appointment_id}")  # Not /api/shared/appointments
+@router.put("/appointments/{appointment_id}")  
 def update_appointment(
     appointment_id: int,
     update: AppointmentUpdate,
@@ -150,7 +148,6 @@ def update_appointment(
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
     
-    # Get the service to find the owner_id
     service = db.query(Service).filter(Service.name == appointment.type).first()
     if not service:
         raise HTTPException(status_code=404, detail="Service not found")
@@ -178,7 +175,7 @@ def update_appointment(
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.put("/appointments/{appointment_id}")  # Not /api/shared/appointments
+@router.put("/appointments/{appointment_id}")  
 def delete_appointment(
    appointment_id: int,
    db: Session = Depends(get_db),
@@ -202,7 +199,6 @@ def get_available_topics(db: Session = Depends(get_db)):
     """Get all available topics that can be used for appointments"""
     topics = db.query(Topic).join(Service).all()
     
-    # Format the response to show useful information
     topic_list = []
     for topic in topics:
         topic_list.append({

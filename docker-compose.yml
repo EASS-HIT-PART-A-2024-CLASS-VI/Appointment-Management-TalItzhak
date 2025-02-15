@@ -37,7 +37,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - ./llm_service/app:/app/app  # Changed to only mount the app directory
+      - ./llm_service/app:/app/app 
     environment:
       - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
     deploy:

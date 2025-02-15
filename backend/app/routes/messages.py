@@ -20,7 +20,6 @@ async def send_message_to_business(
 ):
     """Send a message to a specific business owner"""
     try:
-        # Get sender (client) details
         print(f"Looking for sender with username: {current_user['sub']}")
         sender = db.query(User).filter(User.username == current_user["sub"]).first()
         if not sender:
@@ -30,7 +29,6 @@ async def send_message_to_business(
         if sender.role != "customer":
             raise HTTPException(status_code=403, detail="Only customers can send messages to businesses")
         
-        # Get recipient (business owner) details
         print(f"Looking for business owner with ID: {business_id}")
         recipient = db.query(User).filter(
             User.id == business_id,
@@ -63,7 +61,6 @@ async def send_message_to_business(
         db.commit()
         db.refresh(db_message)
         
-        # Create response with sender and recipient names
         response = MessageResponse(
             id=db_message.id,
             title=db_message.title,
@@ -108,7 +105,6 @@ async def get_my_messages(
     # Add sender names to response
     response_messages = []
     for msg in messages:
-        # Get sender details
         sender = db.query(User).filter(User.id == msg.sender_id).first()
         
         # Create MessageResponse object with all required fields

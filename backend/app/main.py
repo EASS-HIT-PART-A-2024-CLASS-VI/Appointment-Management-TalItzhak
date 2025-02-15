@@ -14,21 +14,18 @@ app = FastAPI(
     description="API for managing appointments"
 )
 
-# CORS Middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For development only. Configure properly in production
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Add a root endpoint for health check
 @app.get("/")
 async def root():
     return {"message": "API is running"}
 
-# Include routers
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(shared_router, prefix="/api/shared", tags=["Shared"])
 app.include_router(business_router, prefix="/api/business", tags=["Business"])

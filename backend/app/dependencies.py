@@ -25,15 +25,13 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         role = payload.get("role")
         if not user_data or not role:
             raise HTTPException(status_code=401, detail="Invalid authentication token")
-        print(f"Decoded JWT: {payload}")  # Debugging log
-        return payload  # Return decoded payload
+        print(f"Decoded JWT: {payload}") 
+        return payload  
     except PyJWTError as e:
-        print(f"JWT Error: {str(e)}")  # Debugging log
+        print(f"JWT Error: {str(e)}")  
         raise HTTPException(status_code=401, detail="Invalid authentication token")
     
     
-
-# Function to check the role of the user
 def check_user_role(required_role: str):
     def role_checker(current_user: dict = Depends(get_current_user)):
         user_role = current_user.get("role")

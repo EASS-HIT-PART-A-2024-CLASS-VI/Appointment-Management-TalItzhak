@@ -3,7 +3,6 @@ from typing import List, Optional
 from pydantic import BaseModel, ConfigDict, validator , Field
 from enum import Enum
 
-# Days of Week Enum
 class DayOfWeek(str, Enum):
     SUNDAY = "Sunday"
     MONDAY = "Monday"
@@ -13,7 +12,6 @@ class DayOfWeek(str, Enum):
     FRIDAY = "Friday"
     SATURDAY = "Saturday"
 
-# User Schemas
 class UserBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     first_name: str
@@ -46,7 +44,7 @@ class ServiceBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     name: str
     duration: int  # Duration of the service in minutes
-    price: int  # Price of the service
+    price: int 
 
 class ServiceCreate(ServiceBase):
     pass
@@ -59,9 +57,8 @@ class ServiceUpdate(BaseModel):
 class ServiceResponse(ServiceBase):
     id: int
     owner_id: int
-    topics: List["TopicResponse"] = []  # List of associated topics
+    topics: List["TopicResponse"] = []  
 
-# Topic Schemas
 class TopicBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     name: str
@@ -69,7 +66,7 @@ class TopicBase(BaseModel):
     cost: int
 
 class TopicCreate(TopicBase):
-    service_id: int  # ID of the service to which the topic belongs
+    service_id: int 
 
 class TopicUpdate(BaseModel):
     name: Optional[str] = None
@@ -79,7 +76,6 @@ class TopicUpdate(BaseModel):
 class TopicResponse(TopicBase):
     id: int
 
-# Appointment Schemas
 class AppointmentBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     date: datetime
@@ -95,22 +91,21 @@ class AppointmentBase(BaseModel):
 class AppointmentCreate(BaseModel):
     date: datetime
     start_time: time
-    title: str  # Title is now used to map to a predefined topic
+    title: str  
     customer_name: str
     customer_phone: str
 
 class AppointmentUpdate(BaseModel):
     date: Optional[datetime] = None
     start_time: Optional[time] = None
-    title: Optional[str] = None  # Title will automatically adjust duration and cost
+    title: Optional[str] = None  
     customer_name: Optional[str] = None
     customer_phone: Optional[str] = None
-    notes: Optional[str] = None  # Notes can still be updated
+    notes: Optional[str] = None  
 
 class AppointmentResponse(AppointmentBase):
     id: int
 
-# Business Response Schema
 class BusinessResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
@@ -121,10 +116,9 @@ class BusinessResponse(BaseModel):
     business_name: Optional[str]  
 
 
-# Updated Availability Schemas
 class AvailabilityBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    day_of_week: DayOfWeek  # Now using the DayOfWeek enum
+    day_of_week: DayOfWeek  
     start_time: time
     end_time: time
 
@@ -147,13 +141,11 @@ class BusinessAvailabilityResponse(BaseModel):
     business_name: str
     availability: List[AvailabilityResponse]
 
-# Pagination Schema
 class PaginatedResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     total: int
     items: List[BaseModel]
 
-# Required for forward references
 TopicResponse.model_rebuild()
 ServiceResponse.model_rebuild()
 

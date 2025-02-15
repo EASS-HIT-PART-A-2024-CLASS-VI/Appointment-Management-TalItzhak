@@ -33,7 +33,6 @@ DB_PASSWORD = os.getenv("DB_PASSWORD", "appointment_password")
 
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
-# Create engine with connection pooling
 engine = create_engine(
     DATABASE_URL,
     pool_size=5,
@@ -45,7 +44,6 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# Database dependency
 def get_db():
     db = SessionLocal()
     try:

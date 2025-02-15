@@ -29,7 +29,6 @@ const AllBusinessesList = ({ onClose }) => {
       }
       
       const data = await response.json();
-      // Ensure we're working with an array
       setBusinesses(Array.isArray(data) ? data : []);
       
     } catch (error) {
@@ -41,7 +40,7 @@ const AllBusinessesList = ({ onClose }) => {
   };
 
   const handleSearch = async (e) => {
-    e?.preventDefault(); // Handle both button click and form submit
+    e?.preventDefault(); 
     
     if (!searchQuery.trim()) {
       fetchBusinesses();
@@ -65,7 +64,7 @@ const AllBusinessesList = ({ onClose }) => {
       }
       
       const data = await response.json();
-      setBusinesses(data.matches || []); // Ensure we get the matches array
+      setBusinesses(data.matches || []); 
       
     } catch (error) {
       console.error('Search error:', error);

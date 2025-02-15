@@ -53,7 +53,6 @@ def get_business_availability(business_id: int, db: Session = Depends(get_db)):
     return availability
 
 # Create a topic
-# Business owner endpoints
 @router.post("/services", response_model=ServiceResponse)
 def create_service(
     service: ServiceCreate,
@@ -61,26 +60,23 @@ def create_service(
     current_user: dict = Depends(business_owner_required)
 ):
     """Create a new service (only for business owners)"""
-    # Get the user first
     user = db.query(User).filter(User.username == current_user["sub"]).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Debug print
     print(f"Creating service for user ID: {user.id}")
 
     new_service = Service(
         name=service.name,
         duration=service.duration,
         price=service.price,
-        owner_id=user.id  # Use the actual user ID
+        owner_id=user.id  
     )
     
     db.add(new_service)
     db.commit()
     db.refresh(new_service)
     
-    # Debug print
     print(f"Created service: {new_service.id} for owner: {new_service.owner_id}")
     
     return new_service
@@ -92,15 +88,11 @@ def get_my_services(
     current_user: dict = Depends(business_owner_required)
 ):
     """Get all services for the logged-in business owner"""
-    # First, get the user from the database using the username from the token
     user = db.query(User).filter(User.username == current_user["sub"]).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-
-    # Get services using the actual user ID
     services = db.query(Service).filter(Service.owner_id == user.id).all()
     
-    # Add debug printing
     print(f"Looking for services for user ID: {user.id}")
     print(f"Found services: {services}")
     
@@ -114,15 +106,13 @@ def update_service(
     db: Session = Depends(get_db),
     current_user: dict = Depends(business_owner_required)
 ):
-    # Get the user first
     user = db.query(User).filter(User.username == current_user["sub"]).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Find the service and verify ownership using the actual user ID
     service = db.query(Service).filter(
         Service.id == service_id,
-        Service.owner_id == user.id  # Updated to use the actual user ID
+        Service.owner_id == user.id  
     ).first()
     
     if not service:
@@ -131,7 +121,6 @@ def update_service(
             detail="Service not found or you don't have permission to modify it"
         )
     
-    # Rest of the code remains the same
     if service_update.name is not None:
         service.name = service_update.name
     if service_update.duration is not None:
@@ -150,14 +139,13 @@ def delete_service(
     db: Session = Depends(get_db),
     current_user: dict = Depends(business_owner_required)
 ):
-    # Get the user first
     user = db.query(User).filter(User.username == current_user["sub"]).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
     service = db.query(Service).filter(
         Service.id == service_id,
-        Service.owner_id == user.id  # Updated to use the actual user ID
+        Service.owner_id == user.id 
     ).first()
     
     if not service:
@@ -166,11 +154,9 @@ def delete_service(
             detail="Service not found or you don't have permission to delete it"
         )
     
-    # First delete all associated topics
     for topic in service.topics:
         db.delete(topic)
     
-    # Then delete the service
     db.delete(service)
     db.commit()
     
@@ -192,17 +178,15 @@ def search_businesses(query: str, businesses_data: list) -> list:
             f"{business.last_name or ''}"
         ).lower()
         
-        # Check business name match
         for term in query_terms:
             if term in business_text:
                 score += 1
         
-        # Check services match
         for service in business.services:
             service_text = service.name.lower()
             for term in query_terms:
                 if term in service_text:
-                    score += 2  # Services matches are weighted higher
+                    score += 2  
         
         if score > 0:
             matching_businesses.append({
@@ -221,7 +205,6 @@ def search_businesses(query: str, businesses_data: list) -> list:
                 "score": score
             })
     
-    # Sort by relevance score
     return sorted(matching_businesses, key=lambda x: x["score"], reverse=True)
 
 @router.get("/public/businesses", response_model=List[BusinessResponse])
@@ -244,12 +227,10 @@ async def smart_service_search(query: SearchQuery, db: Session = Depends(get_db)
     Search for businesses and services using LLM service
     """
     try:
-        # Get all businesses with their services
         businesses = db.query(User).filter(
             User.role == "business_owner"
         ).all()
         
-        # Convert businesses to dictionary format
         businesses_data = [{
             "id": business.id,
             "business_name": business.business_name or f"{business.first_name} {business.last_name}",
@@ -263,7 +244,6 @@ async def smart_service_search(query: SearchQuery, db: Session = Depends(get_db)
             } for service in business.services]
         } for business in businesses]
 
-        # Prepare the request to LLM service
         llm_url = "http://llm_service:8001/analyze-query"
         print(f"Connecting to LLM service at: {llm_url}")
         
@@ -276,15 +256,13 @@ async def smart_service_search(query: SearchQuery, db: Session = Depends(get_db)
                         "query": query.query,
                         "businesses": businesses_data
                     },
-                    timeout=30.0  # 30 seconds timeout
+                    timeout=30.0  
                 )
                 
-                # Check response status
                 if llm_response.status_code == 200:
                     llm_data = llm_response.json()
                     print(f"LLM service response: {llm_data}")
                     
-                    # Return matches found by LLM service
                     if "matches" in llm_data:
                         return {
                             "matches": llm_data["matches"]

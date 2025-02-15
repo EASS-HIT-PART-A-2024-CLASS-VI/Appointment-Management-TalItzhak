@@ -21,12 +21,10 @@ def is_time_conflict(
     try:
         print("\n=== TIME CONFLICT CHECK ===")
         
-        # Convert input date and time
         check_date = datetime.strptime(date, "%Y-%m-%d")
         day_of_week = check_date.strftime("%A")
         print(f"Checking conflicts for date: {check_date.date()} ({day_of_week})")
 
-        # First, check business availability
         availability = db.query(Availability).filter(
             and_(
                 Availability.owner_id == owner_id,
@@ -38,7 +36,6 @@ def is_time_conflict(
             print(f"No business availability set for {day_of_week}")
             return True
 
-        # Convert appointment time to datetime for comparison
         new_time = datetime.strptime(start_time, "%H:%M")
         new_start = datetime.combine(check_date.date(), new_time.time())
         new_end = new_start + timedelta(minutes=duration)
@@ -92,15 +89,11 @@ def is_time_conflict(
         return True
 
 def normalize_phone(phone: str) -> str:
-    """
-    Normalizes a phone number by removing all non-digit characters.
-    """
+
     return re.sub(r'\D', '', phone)
 
 def search_appointment_by_phone_and_name(phone: str, name: str, appointments: dict):
-    """
-    Search appointments by normalized phone and name.
-    """
+
     normalized_phone = normalize_phone(phone)
     matching_appointments = {
         k: v
