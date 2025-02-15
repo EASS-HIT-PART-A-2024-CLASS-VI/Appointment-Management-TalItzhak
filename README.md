@@ -18,6 +18,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ## Customer Features
 <img src="screenshots/Create_Meeting.png" alt="Create Meeting" width="650"/>
+<img src="screenshots/business_client.png" alt="business_client" width="650"/>
 
 
 ## ✨ Features
@@ -51,8 +52,20 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ## 🚀 Getting Started
 
+### Prerequisites
+
+### Prerequisites
+1. Hugging Face API Key:
+   - Create an account at Hugging Face
+   - Generate an API key from your account settings
+   - Create a .env file in the llm_service directory and add your API key:
+
+   ```yaml
+   HUGGINGFACE_API_KEY=your_api_key_here
+
+
 ### Docker Setup (Recommended)
-1. Create a `docker-compose.yml` file in the root directory:
+2. Create a `docker-compose.yml` file in the root directory:
 
    ```yaml
    version: '3.8'
@@ -106,11 +119,11 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
      mysql_data:
 
 
-2. **Run the application:**
+3. **Run the application:**
     ```yaml
    bash docker-compose up --build
 
-3. Access the application:
+4. Access the application:
 - 💻 Frontend: http://localhost:3000
 - 🔌 Backend API: http://localhost:8000
 - 📚 API Documentation: http://localhost:8000/docs
