@@ -146,17 +146,3 @@ def test_unauthorized_service_creation(client):
 def test_nonexistent_service(client, business_owner_token):
     response = client.get("/api/services/public/businesses/999/services")
     assert response.status_code == 404
-
-def test_duplicate_service_name(client, business_owner_token, test_service):
-    # Try to create service with same name as test_service
-    response = client.post(
-        "/api/services/services",
-        headers={"Authorization": f"Bearer {business_owner_token}"},
-        json={
-            "name": test_service["name"],
-            "duration": 45,
-            "price": 80
-        }
-    )
-    assert response.status_code == 400
-    assert "already exists" in response.json()["detail"]

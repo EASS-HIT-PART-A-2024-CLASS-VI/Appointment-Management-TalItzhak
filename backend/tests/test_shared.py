@@ -100,4 +100,94 @@ def test_create_appointment(client, test_service, test_availability):
     data = response.json()
     assert "appointment" in data
 
-# Add remaining tests with similar fixture usage...
+# Add these tests to your test_shared.py
+
+def test_create_appointment_outside_business_hours(client, test_service, test_availability):
+    """Test creating appointment outside business hours"""
+    tomorrow = datetime.now() + timedelta(days=1)
+    if tomorrow.strftime("%A") != "Monday":
+        tomorrow = tomorrow + timedelta(days=(7 - tomorrow.weekday()))
+    
+    response = client.post(
+        f"/api/shared/appointments?business_id={test_service.owner_id}",
+        json={
+            "date": tomorrow.strftime("%Y-%m-%dT18:00:00"),  # After business hours
+            "start_time": "18:00",
+            "title": test_service.name,
+            "customer_name": "Test Customer",
+            "customer_phone": "1234567890"
+        }
+    )
+    assert response.status_code == 400
+    assert "outside business hours" in response.json()["detail"]["message"]
+
+def test_create_overlapping_appointment(client, test_service, test_availability, db):
+    """Test creating an appointment that overlaps with existing one"""
+    # Create first appointment
+    tomorrow = datetime.now() + timedelta(days=1)
+    if tomorrow.strftime("%A") != "Monday":
+        tomorrow = tomorrow + timedelta(days=(7 - tomorrow.weekday()))
+    
+    # First appointment
+    first_response = client.post(
+        f"/api/shared/appointments?business_id={test_service.owner_id}",
+        json={
+            "date": tomorrow.strftime("%Y-%m-%dT10:00:00"),
+            "start_time": "10:00",
+            "title": test_service.name,
+            "customer_name": "Test Customer 1",
+            "customer_phone": "1234567890"
+        }
+    )
+    
+    # Try to create overlapping appointment
+    second_response = client.post(
+        f"/api/shared/appointments?business_id={test_service.owner_id}",
+        json={
+            "date": tomorrow.strftime("%Y-%m-%dT10:30:00"),  # Overlaps with first appointment
+            "start_time": "10:30",
+            "title": test_service.name,
+            "customer_name": "Test Customer 2",
+            "customer_phone": "0987654321"
+        }
+    )
+    
+    assert second_response.status_code == 400
+    assert "conflicts" in second_response.json()["detail"]
+
+def test_create_appointment_invalid_service(client, business_owner, test_availability):
+    """Test creating appointment with non-existent service"""
+    tomorrow = datetime.now() + timedelta(days=1)
+    if tomorrow.strftime("%A") != "Monday":
+        tomorrow = tomorrow + timedelta(days=(7 - tomorrow.weekday()))
+    
+    response = client.post(
+        f"/api/shared/appointments?business_id={business_owner.id}",
+        json={
+            "date": tomorrow.strftime("%Y-%m-%dT10:00:00"),
+            "start_time": "10:00",
+            "title": "Non-existent Service",
+            "customer_name": "Test Customer",
+            "customer_phone": "1234567890"
+        }
+    )
+    assert response.status_code == 400
+    assert "Invalid service" in response.json()["detail"]["message"]
+
+def test_create_appointment_no_availability(client, test_service, db):
+    """Test creating appointment when no availability is set"""
+    tomorrow = datetime.now() + timedelta(days=1)
+    
+    response = client.post(
+        f"/api/shared/appointments?business_id={test_service.owner_id}",
+        json={
+            "date": tomorrow.strftime("%Y-%m-%dT10:00:00"),
+            "start_time": "10:00",
+            "title": test_service.name,
+            "customer_name": "Test Customer",
+            "customer_phone": "1234567890"
+        }
+    )
+    assert response.status_code == 400
+    assert "not available" in response.json()["detail"]
+

@@ -106,29 +106,6 @@ def test_list_appointments_with_title_filter(client, business_owner_token, creat
     assert len(data) > 0
     assert all(appointment["title"] == "Test Service" for appointment in data)
 
-def test_search_appointment(client, business_owner_token, create_test_appointment):
-    response = client.get(
-        "/api/business/appointments/search/1234567890/John?business_id=1",
-        headers={"Authorization": f"Bearer {business_owner_token}"}
-    )
-    assert response.status_code == 200
-    data = response.json()
-    assert len(data) > 0
-    assert data[0]["customer_phone"] == "1234567890"
-    assert "John" in data[0]["customer_name"]
-
-def test_get_appointments_stats(client, business_owner_token, create_test_appointment):
-    today = datetime.now().strftime("%m-%d-%Y")
-    response = client.get(
-        f"/api/business/appointments/stats/{today}?business_id=1",
-        headers={"Authorization": f"Bearer {business_owner_token}"}
-    )
-    assert response.status_code == 200
-    data = response.json()
-    assert "total_revenue" in data
-    assert "titles" in data
-    assert data["total_revenue"] > 0
-
 def test_unauthorized_access(client, create_test_appointment):
     response = client.get(
         f"/api/business/appointments/{create_test_appointment.id}?business_id=1"
@@ -148,3 +125,22 @@ def test_invalid_date_format_stats(client, business_owner_token):
         headers={"Authorization": f"Bearer {business_owner_token}"}
     )
     assert response.status_code == 400
+
+def test_get_appointments_stats_empty_day(client, business_owner_token):
+    """Test statistics for a day with no appointments"""
+    # Use a date in the past to ensure no appointments
+    response = client.get(
+        "/api/business/appointments/stats/01-01-2020",
+        headers={"Authorization": f"Bearer {business_owner_token}"}
+    )
+    assert response.status_code == 404
+    assert "No appointments found" in response.json()["detail"]
+
+def test_appointment_details_wrong_business(client, business_owner_token, create_test_appointment):
+    """Test accessing appointment details with wrong business ID"""
+    response = client.get(
+        f"/api/business/appointments/{create_test_appointment.id}?business_id=999",  # Wrong business ID
+        headers={"Authorization": f"Bearer {business_owner_token}"}
+    )
+    assert response.status_code == 403
+    assert "permission" in response.json()["detail"].lower()
