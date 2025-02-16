@@ -194,3 +194,8 @@ After running the backend server, visit:
 - FastAPI documentation
 - React documentation
 - SQLAlchemy documentation
+
+## ✨ Demo
+
+- https://www.youtube.com/watch?v=KsMuxwve0og&t=15s
+
