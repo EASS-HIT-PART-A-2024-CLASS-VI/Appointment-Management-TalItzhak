@@ -176,3 +176,68 @@ def test_invalid_time_range(client, business_owner_token):
         }
     )
     assert response.status_code == 422  # Validation error
+
+def test_create_availability_for_multiple_days(client, business_owner_token):
+    days = ["Monday", "Tuesday", "Wednesday"]
+    for day in days:
+        response = client.post(
+            "/api/availability/availability",
+            headers={"Authorization": f"Bearer {business_owner_token}"},
+            json={
+                "day_of_week": day,
+                "start_time": "09:00",
+                "end_time": "17:00"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["day_of_week"] == day
+
+def test_create_availability_with_invalid_day(client, business_owner_token):
+    response = client.post(
+        "/api/availability/availability",
+        headers={"Authorization": f"Bearer {business_owner_token}"},
+        json={
+            "day_of_week": "NotADay",
+            "start_time": "09:00",
+            "end_time": "17:00"
+        }
+    )
+    assert response.status_code == 422  # Validation error
+
+def test_create_availability_with_exact_matching_time(client, business_owner_token):
+    client.post(
+        "/api/availability/availability",
+        headers={"Authorization": f"Bearer {business_owner_token}"},
+        json={
+            "day_of_week": "Monday",
+            "start_time": "09:00",
+            "end_time": "17:00"
+        }
+    )
+    response = client.post(
+        "/api/availability/availability",
+        headers={"Authorization": f"Bearer {business_owner_token}"},
+        json={
+            "day_of_week": "Monday",
+            "start_time": "09:00",
+            "end_time": "17:00"
+        }
+    )
+    assert response.status_code == 400  # Overlapping test
+
+def test_get_availability_when_none_exists(client, business_owner_token):
+    response = client.get(
+        "/api/availability/my-availability",
+        headers={"Authorization": f"Bearer {business_owner_token}"}
+    )
+    assert response.status_code == 200
+    assert response.json() == []  # Expecting an empty list
+
+def test_delete_non_existent_availability(client, business_owner_token):
+    response = client.delete(
+        "/api/availability/availability/9999",
+        headers={"Authorization": f"Bearer {business_owner_token}"}
+    )
+    assert response.status_code == 404  # Availability not found
+

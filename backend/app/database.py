@@ -1,3 +1,4 @@
+# app/database.py
 from dotenv import load_dotenv
 import os
 from sqlalchemy import create_engine
@@ -26,20 +27,25 @@ def wait_for_db():
     return False
 
 # Database connection settings
-DB_HOST = os.getenv("DB_HOST", "db")
-DB_NAME = os.getenv("DB_NAME", "appointmentdb")
-DB_USER = os.getenv("DB_USER", "appointment_user")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "appointment_password")
-
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-
-engine = create_engine(
-    DATABASE_URL,
-    pool_size=5,
-    max_overflow=10,
-    pool_pre_ping=True,
-    pool_recycle=3600
-)
+if os.environ.get('TESTING') == 'True':
+    DATABASE_URL = "sqlite:///./test.db"
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    DB_HOST = os.getenv("DB_HOST", "db")
+    DB_NAME = os.getenv("DB_NAME", "appointmentdb")
+    DB_USER = os.getenv("DB_USER", "appointment_user")
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "appointment_password")
+    DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    engine = create_engine(
+        DATABASE_URL,
+        pool_size=5,
+        max_overflow=10,
+        pool_pre_ping=True,
+        pool_recycle=3600
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

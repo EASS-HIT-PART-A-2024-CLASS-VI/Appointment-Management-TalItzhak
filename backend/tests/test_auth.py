@@ -191,7 +191,18 @@ def test_invalid_token_format(client):
     assert response.status_code == 401
     assert "Not authenticated" in response.json()["detail"]
 
-def test_expired_token(client):
-    # This would require mocking the token creation time
-    # Implementation depends on your token expiration mechanism
-    pass
+def test_login_invalid_username(client, test_customer):
+    client.post("/auth/register", json=test_customer)
+    response = client.post("/auth/login", data={"username": "wronguser", "password": test_customer["password"]})
+    assert response.status_code == 401
+    assert "Invalid username or password" in response.json()["detail"]
+
+# Test role-based access (check if correct role is assigned)
+def test_register_correct_role(client, test_business_owner):
+    response = client.post("/auth/register", json=test_business_owner)
+    assert response.status_code == 200
+    db = TestingSessionLocal()
+    user = db.query(User).filter(User.username == test_business_owner["username"]).first()
+    db.close()
+    assert user.role == "business_owner"
+

@@ -144,3 +144,5 @@ def test_appointment_details_wrong_business(client, business_owner_token, create
     )
     assert response.status_code == 403
     assert "permission" in response.json()["detail"].lower()
+
+
