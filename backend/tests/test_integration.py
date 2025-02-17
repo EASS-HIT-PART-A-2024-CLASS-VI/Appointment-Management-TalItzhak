@@ -43,21 +43,21 @@ def client(test_db):
 @pytest.fixture
 def business_owner_data():
     return {
-        "first_name": "יוסי",
-        "last_name": "לוי",
-        "username": "yossilevy",
+        "first_name": "John",
+        "last_name": "Smith",
+        "username": "johnsmith",
         "phone": "0509876543",
         "password": "Pass1234!",
         "role": "business_owner",
-        "business_name": "יוסי עיצוב שיער"
+        "business_name": "John's Hair Design"
     }
 
 @pytest.fixture
 def customer_data():
     return {
-        "first_name": "דני",
-        "last_name": "ישראלי",
-        "username": "dannyis",
+        "first_name": "Danny",
+        "last_name": "Brown",
+        "username": "dannybrown",
         "phone": "0501112222",
         "password": "Pass1234!",
         "role": "customer"
@@ -86,17 +86,17 @@ def test_business_complete_flow(client, business_owner_data):
     # 3. Service Setup
     services = [
         {
-            "name": "תספורת גברים",
+            "name": "Men's Haircut",
             "duration": 30,
             "price": 80
         },
         {
-            "name": "צבע שיער",
+            "name": "Hair Coloring",
             "duration": 120,
             "price": 200
         },
         {
-            "name": "תספורת ילדים",
+            "name": "Kids Haircut",
             "duration": 20,
             "price": 50
         }
@@ -147,7 +147,7 @@ def test_customer_booking_flow(client, business_owner_data, customer_data):
     
     # 2. Setup Services and Availability
     service = {
-        "name": "תספורת גברים",
+        "name": "Men's Haircut",
         "duration": 30,
         "price": 80
     }
@@ -177,7 +177,7 @@ def test_customer_booking_flow(client, business_owner_data, customer_data):
     appointment_data = {
         "date": next_monday.strftime("%Y-%m-%dT10:00:00"),
         "start_time": "10:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -192,7 +192,7 @@ def test_customer_booking_flow(client, business_owner_data, customer_data):
     # 5. Send Message to Business
     message_data = {
         "title": "Questions About Services",
-        "content": "האם אפשר להקדים את התור שלי?"
+        "content": "Can I reschedule my appointment to an earlier time?"
     }
     message_response = client.post(
         "/api/messages/send/1",
@@ -222,7 +222,7 @@ def test_double_booking_prevention(client, business_owner_data, customer_data):
     
     # Setup service and availability
     service = {
-        "name": "תספורת גברים",
+        "name": "Men's Haircut",
         "duration": 30,
         "price": 80
     }
@@ -271,7 +271,7 @@ def test_double_booking_prevention(client, business_owner_data, customer_data):
     appointment_data = {
         "date": next_monday.strftime("%Y-%m-%dT10:00:00"),
         "start_time": "10:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -295,8 +295,6 @@ def test_double_booking_prevention(client, business_owner_data, customer_data):
     assert response2.status_code == 400
     assert "conflicts" in response2.json()["detail"]
 
-
-
 def test_service_modification_with_existing_appointments(client, business_owner_data, customer_data):
     """Test modifying service duration when appointments exist"""
     # Setup and create appointment
@@ -313,7 +311,7 @@ def test_service_modification_with_existing_appointments(client, business_owner_
     
     # Create service
     service = {
-        "name": "תספורת גברים",
+        "name": "Men's Haircut",
         "duration": 30,
         "price": 80
     }
@@ -345,7 +343,7 @@ def test_service_modification_with_existing_appointments(client, business_owner_
     appointment_data = {
         "date": next_monday.strftime("%Y-%m-%dT10:00:00"),
         "start_time": "10:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -391,7 +389,7 @@ def test_service_modification_with_existing_appointments(client, business_owner_
     new_appointment_data = {
         "date": next_monday.strftime("%Y-%m-%dT11:00:00"),
         "start_time": "11:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -410,7 +408,7 @@ def test_service_modification_with_existing_appointments(client, business_owner_
     overlap_appointment_data = {
         "date": next_monday.strftime("%Y-%m-%dT11:45:00"),  # Would overlap with 60-min duration
         "start_time": "11:45",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -422,7 +420,6 @@ def test_service_modification_with_existing_appointments(client, business_owner_
     )
     assert overlap_response.status_code == 400
     assert "conflicts" in overlap_response.json()["detail"]
-
 
 def test_message_notification_flow(client, business_owner_data, customer_data):
     """Test the complete message notification flow between customer and business"""
@@ -453,7 +450,7 @@ def test_message_notification_flow(client, business_owner_data, customer_data):
     # Customer sends message
     message_data = {
         "title": "Questions About Services",
-        "content": "האם יש לך זמן פנוי מחר?"
+        "content": "Do you have any availability tomorrow?"
     }
     send_response = client.post(
         "/api/messages/send/1",
@@ -512,7 +509,7 @@ def test_multiple_day_booking_validation(client, business_owner_data, customer_d
 
     # Create service
     service = {
-        "name": "תספורת גברים",
+        "name": "Men's Haircut",
         "duration": 30,
         "price": 80
     }
@@ -548,7 +545,7 @@ def test_multiple_day_booking_validation(client, business_owner_data, customer_d
     monday_data = {
         "date": next_monday.strftime("%Y-%m-%dT10:00:00"),
         "start_time": "10:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -563,7 +560,7 @@ def test_multiple_day_booking_validation(client, business_owner_data, customer_d
     monday_early = {
         "date": next_monday.strftime("%Y-%m-%dT08:00:00"),
         "start_time": "08:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -580,7 +577,7 @@ def test_multiple_day_booking_validation(client, business_owner_data, customer_d
     tuesday_data = {
         "date": next_tuesday.strftime("%Y-%m-%dT15:00:00"),
         "start_time": "15:00",
-        "title": "תספורת גברים",
+        "title": "Men's Haircut",
         "customer_name": f"{customer_data['first_name']} {customer_data['last_name']}",
         "customer_phone": customer_data["phone"]
     }
@@ -590,4 +587,3 @@ def test_multiple_day_booking_validation(client, business_owner_data, customer_d
         headers=customer_headers
     )
     assert tuesday_response.status_code == 200
-
