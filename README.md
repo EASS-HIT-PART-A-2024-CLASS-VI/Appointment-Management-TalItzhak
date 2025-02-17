@@ -52,7 +52,7 @@ A full-stack appointment scheduling application built with FastAPI and React, fe
 
 ## 🚀 Getting Started
 
-### Prerequisites
+To access the full functionality of the system, you need to create the appropriate users—business owners and customers—allowing you to explore all the features the system offers.
 
 ### Prerequisites
 1. Hugging Face API Key:
